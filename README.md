@@ -1,4 +1,4 @@
-# SevenCom : portail du label + sites artistes
+# Seven.com : portail du label + sites artistes
 
 Un seul code PHP sert **sevencom.tech** (le portail) et **tous les sous-domaines artistes**
 (ex. `christiankayembe.sevencom.tech`). Le site affiché dépend du nom de domaine appelé.
@@ -21,7 +21,7 @@ Le dépôt correspond directement au dossier `public_html` du site (déployé su
     └── artists/christiankayembe.json   ← nom du fichier = sous-domaine
 ```
 
-**Liens entre les sites** : chaque site artiste a une barre SevenCom qui renvoie au portail et aux autres artistes, plus une section qui promeut les outils du label.
+**Liens entre les sites** : chaque site artiste a une barre Seven.com qui renvoie au portail et aux autres artistes, plus une section qui promeut les outils du label.
 
 ## Ajouter un nouvel artiste
 

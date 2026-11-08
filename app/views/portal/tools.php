@@ -1,7 +1,7 @@
 <?php use function App\{e, tools}; ?>
 <section>
   <h1>Outils du label</h1>
-  <p class="lead">Les services et outils que SevenCom met à disposition de ses artistes et partenaires.</p>
+  <p class="lead">Les services et outils que Seven.com met à disposition de ses artistes et partenaires.</p>
   <div class="grid">
   <?php foreach (tools() as $t): ?>
     <div class="card">

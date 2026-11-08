@@ -1,7 +1,7 @@
 <?php use function App\{e, url, artists}; ?>
 <section>
   <h1>Nos artistes</h1>
-  <p class="lead">Chaque artiste SevenCom a son propre site sur un sous-domaine.</p>
+  <p class="lead">Chaque artiste Seven.com a son propre site sur un sous-domaine.</p>
   <div class="grid">
   <?php foreach (artists() as $a): ?>
     <a class="card" href="<?= e(url($a['slug'])) ?>" style="--accent:<?= e($a['theme']['accent'] ?? '') ?>">
