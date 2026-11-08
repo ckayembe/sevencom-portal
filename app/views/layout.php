@@ -36,6 +36,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
         <?php if ($me['role'] === 'admin'): ?>
           <a href="<?= e(url(null, '/admin')) ?>">Artistes</a>
           <a href="<?= e(url(null, '/admin/label')) ?>">Label &amp; outils</a>
+          <a href="<?= e(url(null, '/admin/contrats')) ?>">Contrats</a>
         <?php elseif ($me['artist_slug']): ?>
           <a href="<?= e(url(null, '/admin/artistes/' . $me['artist_slug'])) ?>">Ma fiche</a>
         <?php endif; ?>
@@ -51,6 +52,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
     <nav>
       <a href="<?= e(url(null, '/artistes')) ?>">Artistes</a>
       <a href="<?= e(url(null, '/outils')) ?>">Outils</a>
+      <a href="<?= e(url(null, '/formules')) ?>">Formules</a>
       <a href="<?= e(url(null, '/contact')) ?>">Contact</a>
     </nav>
   </header>

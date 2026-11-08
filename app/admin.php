@@ -29,6 +29,10 @@ function admin_route(string $path): bool {
         case (bool)preg_match('#^/admin/artistes/([a-z0-9-]+)$#', $path, $m):
             if (!can_edit_artist($m[1])) { forbidden(); return true; }
             admin_artist($m[1], $post); return true;
+        case $path === '/admin/contrats':
+            require_admin(); admin_view('admin/contracts', ['c' => contract_sections(), 'artists' => all_artists(true)]); return true;
+        case (bool)preg_match('#^/admin/contrats/([1-9])$#', $path, $m):
+            require_admin(); admin_contract((int)$m[1]); return true;
         case (bool)preg_match('#^/admin/comptes/(\d+)/nouveau-mot-de-passe$#', $path, $m) && $post:
             require_admin(); admin_reset_password((int)$m[1]); return true;
     }
@@ -257,4 +261,19 @@ function serve_media(string $name): void {
     header('Cache-Control: public, max-age=31536000, immutable');
     header('X-Content-Type-Options: nosniff');
     readfile($file);
+}
+
+function admin_contract(int $n): void {
+    $c = contract_sections();
+    if (!isset($c['contracts'][$n])) { admin_view('admin/message', ['title' => 'Introuvable', 'text' => "Ce modèle n'existe pas."], 404); return; }
+    $slug = (string)($_GET['artiste'] ?? '');
+    $a = $slug !== '' ? (all_artists(true)[$slug] ?? null) : null;
+    $group = $a ? in_array($a['kind'] ?? 'solo', ['groupe', 'chorale'], true) : true;
+    $md = $c['contracts'][$n]['body'];
+    foreach ($c['annexes'] as $k => $ax) {
+        if ($k === 'B' && !$group) continue;
+        $md .= "\n\n## {$ax['title']}\n\n{$ax['body']}";
+    }
+    admin_view('admin/contract', ['n' => $n, 'title' => $c['contracts'][$n]['title'], 'html' => md(fill_contract($md, $a)),
+        'artist' => $a, 'artists' => all_artists(true), 'withB' => $group]);
 }
