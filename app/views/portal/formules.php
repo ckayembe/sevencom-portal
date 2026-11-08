@@ -5,7 +5,6 @@
   <div class="grid">
   <?php foreach (contract_formulas() as $f): ?>
     <div class="card formula">
-      <span class="tag">Formule <?= $f['n'] ?></span>
       <h3><?= e($f['name']) ?></h3>
       <p><?= e($f['for']) ?>.</p>
       <dl>

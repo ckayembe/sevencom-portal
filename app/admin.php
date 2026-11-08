@@ -256,6 +256,14 @@ function admin_label(bool $post): void {
         }
         $L['about'] = ['intro' => post_str('about_intro', 2000), 'mission' => post_str('about_mission', 2000), 'vision' => post_str('about_vision', 2000), 'story' => post_str('about_story', 4000), 'values' => []];
         foreach (post_rows('values', ['title', 'text']) as $r) if ($r['title'] !== '') $L['about']['values'][] = ['title' => $r['title'], 'text' => $r['text']];
+        $L['slides'] = [];
+        try {
+            foreach (post_rows('slides', ['title', 'text', 'link', 'old_image']) as $r) {
+                $img = upload_image(nth_file('slides', 'image', $r['_i'])) ?: (str_starts_with($r['old_image'], '/') ? $r['old_image'] : '');
+                if ($r['title'] === '' && !$img) continue;
+                $L['slides'][] = ['title' => $r['title'], 'text' => $r['text'], 'link' => clean_url($r['link']) ?: (preg_match('#^/[a-z0-9/?=_-]*$#i', $r['link']) ? $r['link'] : ''), 'image' => $img];
+            }
+        } catch (\RuntimeException $ex) { flash($ex->getMessage()); }
         $L['stats'] = [];
         foreach (post_rows('stats', ['value', 'label']) as $r) if ($r['value'] !== '' && $r['label'] !== '') $L['stats'][] = ['value' => $r['value'], 'label' => $r['label']];
         save_setting('label', $L); save_setting('tools', $tools);

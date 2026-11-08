@@ -99,3 +99,21 @@ function about(): array {
     foreach ($d as $k => $v) if (empty($a[$k])) $a[$k] = $v;
     return $a;
 }
+
+/** Diapos du carrousel 3D : celles de l'admin d'abord, puis celles générées à partir du site. */
+function slides(): array {
+    $s = [];
+    foreach (label()['slides'] ?? [] as $x) if (!empty($x['title']) || !empty($x['image'])) $s[] = $x + ['kicker' => 'À la une'];
+    $s[] = ['kicker' => 'Le label', 'title' => 'Le chiffre de votre réussite', 'text' => label()['tagline'] ?? '', 'image' => '/assets/img/logo-full.webp', 'fit' => 'contain', 'link' => url(null, '/a-propos')];
+    foreach (artists() as $a) {
+        $img = (!empty($a['photo']) && !str_contains($a['photo'], 'placeholder')) ? $a['photo'] : ($a['logo'] ?? '');
+        $s[] = ['kicker' => KINDS[$a['kind'] ?? 'solo'] === KINDS['solo'] ? 'Artiste' : KINDS[$a['kind']], 'title' => $a['name'], 'text' => $a['tagline'] ?? '',
+                'image' => $img, 'fit' => ($img && $img === ($a['logo'] ?? null)) ? 'contain' : 'cover', 'link' => url($a['slug'])];
+    }
+    if ($r = all_releases()[0] ?? null) $s[] = ['kicker' => 'Dernière sortie', 'title' => $r['title'], 'text' => $r['artist']['name'], 'image' => str_contains($r['cover'] ?? '', 'placeholder') ? '' : ($r['cover'] ?? ''), 'link' => url(null, '/sorties')];
+    if ($v = all_videos()[0] ?? null) $s[] = ['kicker' => 'Clip', 'title' => $v['title'], 'text' => $v['artist']['name'], 'image' => "https://i.ytimg.com/vi/{$v['youtube']}/hqdefault.jpg", 'link' => url(null, '/clips')];
+    $s[] = ['kicker' => 'Artistes', 'title' => 'Soumettre une démo', 'text' => 'Nous écoutons chaque titre.', 'image' => '', 'link' => url(null, '/demo')];
+    $s[] = ['kicker' => 'Services', 'title' => 'Production, promotion, distribution', 'text' => 'Six formules pour chaque artiste.', 'image' => '', 'link' => url(null, '/formules')];
+    $s[] = ['kicker' => 'Booking', 'title' => 'Invitez nos artistes', 'text' => 'Cultes, concerts, conventions.', 'image' => '', 'link' => url(null, '/demo?objet=booking')];
+    return array_slice($s, 0, 12);
+}

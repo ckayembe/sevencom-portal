@@ -2,7 +2,7 @@
 $socialRows = []; foreach (($L['socials'] ?? []) as $n => $u) $socialRows[] = ['name' => $n, 'url' => $u]; ?>
 <section>
   <h1>Label &amp; outils</h1>
-  <form method="post" class="form wide">
+  <form method="post" enctype="multipart/form-data" class="form wide">
     <?= csrf_field() ?>
     <fieldset><legend>Le label</legend>
       <label>Nom<input name="name" required value="<?= e($L['name'] ?? '') ?>"></label>
@@ -13,6 +13,11 @@ $socialRows = []; foreach (($L['socials'] ?? []) as $n => $u) $socialRows[] = ['
     </fieldset>
     <fieldset><legend>Réseaux sociaux du label</legend>
       <?php $name = 'socials'; $rows = $socialRows; $fields = ['name' => ['Réseau', 'text'], 'url' => ['Lien', 'text']]; require __DIR__ . '/_rows.php'; ?>
+    </fieldset>
+    <fieldset><legend>Diaporama 3D de l'accueil</legend>
+      <p class="small">Vos diapos passent en premier (affiche d'un concert, nouvel album…). Le diaporama ajoute ensuite automatiquement le label, les artistes, la dernière sortie, le dernier clip et les services. Image idéale : format paysage 1600 × 1000.</p>
+      <?php $name = 'slides'; $rows = array_map(fn($x) => $x + ['old_image' => $x['image'] ?? ''], $L['slides'] ?? []);
+      $fields = ['image' => ['Image', 'file'], 'old_image' => ['', 'hidden'], 'title' => ['Titre', 'text'], 'text' => ['Sous-titre', 'text'], 'link' => ['Lien (ex. /sorties ou https://…)', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>
     <?php $ab = App\about(); ?>
     <fieldset><legend>Qui sommes-nous (page « Le label »)</legend>

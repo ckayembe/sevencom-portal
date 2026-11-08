@@ -12,6 +12,7 @@ $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(
   <p class="hero-actions"><a class="btn" href="<?= e(url(null, '/artistes')) ?>">Découvrir nos artistes</a>
      <a class="btn ghost" href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a></p>
 </section>
+<?php require __DIR__ . '/_carousel.php'; ?>
 <div class="marquee" aria-hidden="true"><div class="marquee-track">
   <?php $words = ['Louange', 'Adoration', 'Gospel', 'Chorales', 'Production', 'Clips', 'Promotion', 'Distribution', 'Booking'];
   for ($k = 0; $k < 2; $k++) foreach ($words as $w) echo '<span>' . e($w) . '</span>'; ?>
@@ -74,7 +75,7 @@ $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(
   <p>De la production complète à un coup de pouce sur la promotion : chaque artiste choisit la formule qui lui correspond.</p>
   <div class="grid services">
   <?php foreach (contract_formulas() as $f): ?>
-    <a class="card" href="<?= e(url(null, '/formules')) ?>"><span class="tag">0<?= $f['n'] ?></span><h3><?= e($f['name']) ?></h3><p><?= e($f['for']) ?>.</p></a>
+    <a class="card" href="<?= e(url(null, '/formules')) ?>"><h3><?= e($f['name']) ?></h3><p><?= e($f['for']) ?>.</p></a>
   <?php endforeach; ?>
   </div>
   <p><a href="<?= e(url(null, '/formules')) ?>">Comparer les formules →</a> · <a href="<?= e(url(null, '/demo?objet=booking')) ?>">Booking d'un artiste →</a></p>
