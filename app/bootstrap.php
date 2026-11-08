@@ -19,6 +19,7 @@ require __DIR__ . '/import.php';
 require __DIR__ . '/contracts.php';
 require __DIR__ . '/planner.php';
 require __DIR__ . '/promolien.php';
+require __DIR__ . '/hosting.php';
 require __DIR__ . '/portal.php';
 
 function label(): array { static $l; return $l ??= setting('label'); }
