@@ -1,4 +1,4 @@
-<?php use function App\{e, url, label, artists}; $L = label();
+<?php use function App\{e, url, label, artists, asset}; $L = label();
 $title = isset($artist) ? $artist['name'] . ' · ' . $L['name'] : $L['name'] . ' · ' . $L['tagline'];
 $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
 <!doctype html>
@@ -8,11 +8,11 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($artist['tagline'] ?? $L['description']) ?>">
-<link rel="icon" href="/assets/img/favicon.png">
+<link rel="icon" href="<?= e(asset('/assets/img/favicon.png')) ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="<?= e(asset('/assets/css/style.css')) ?>">
 <style>:root{--accent:<?= e($accent) ?>}</style>
 </head>
 <body class="<?= e($section) ?>">

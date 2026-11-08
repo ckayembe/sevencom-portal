@@ -42,6 +42,12 @@ function url(?string $sub = null, string $path = '/'): string {
     return "$scheme://$host$path";
 }
 
+/** URL d'un fichier statique avec version (évite l'ancien cache du navigateur). */
+function asset(string $path): string {
+    $file = ROOT . $path;
+    return $path . (is_file($file) ? '?v=' . filemtime($file) : '');
+}
+
 function e(?string $s): string { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
 /** Détermine le sous-domaine à partir du nom d'hôte. null = portail. */
