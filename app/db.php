@@ -62,6 +62,7 @@ function migrate(PDO $pdo): void {
             created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
     SQL);
+    planner_migrate($pdo);
 
     // Premier lancement : on importe le contenu de data/*.json et on crée le compte admin.
     if (!$pdo->query('SELECT COUNT(*) FROM settings')->fetchColumn()) {

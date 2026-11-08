@@ -15,6 +15,8 @@ function admin_route(string $path): bool {
     if (!$u) { redirect('/admin/connexion'); return true; }
     if ($u['must_change_password'] && $path !== '/admin/mot-de-passe') { redirect('/admin/mot-de-passe'); return true; }
 
+    if (str_starts_with($path, '/admin/planning') && admin_planner_route($path, $post)) return true;
+
     switch (true) {
         case $path === '/admin':
             if (!is_admin()) { redirect('/admin/artistes/' . $u['artist_slug']); return true; }

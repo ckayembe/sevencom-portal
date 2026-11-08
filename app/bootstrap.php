@@ -17,10 +17,17 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/import.php';
 require __DIR__ . '/contracts.php';
+require __DIR__ . '/planner.php';
 require __DIR__ . '/portal.php';
 
 function label(): array { static $l; return $l ??= setting('label'); }
 function tools(): array { static $t; return $t ??= setting('tools'); }
+/** Outils intégrés au site (espace artiste), affichés en tête de la page Outils. */
+function builtin_tools(): array {
+    return [
+        ['name' => 'Planificateur de sorties', 'summary' => "Un rétroplanning pour chaque single, EP ou album : master, pochette, distribution, pré-sauvegarde et promo, avec les échéances calculées depuis la date de sortie et un rappel dans l'agenda.", 'status' => 'Disponible', 'url' => '/admin/planning', 'cta' => 'Ouvrir (espace artiste)'],
+    ];
+}
 function artists(): array { static $a; return $a ??= all_artists(); }
 function artist(string $slug): ?array { return artists()[$slug] ?? null; }
 
