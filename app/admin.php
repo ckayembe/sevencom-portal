@@ -20,10 +20,13 @@ function admin_route(string $path): bool {
     switch (true) {
         case $path === '/admin':
             if (!is_admin()) { redirect('/admin/artistes/' . $u['artist_slug']); return true; }
+            retry_pending_sites();
             admin_view('admin/dashboard', ['artists' => all_artists(true), 'users' => db()->query('SELECT * FROM users ORDER BY role, name')->fetchAll()]);
             return true;
         case $path === '/admin/mot-de-passe':
             admin_password($post, $u); return true;
+        case $path === '/admin/hebergement':
+            admin_hosting($post); return true;
         case $path === '/admin/label':
             require_admin(); admin_label($post); return true;
         case $path === '/admin/artistes/nouveau':
@@ -229,7 +232,9 @@ function admin_artist(?string $slug, bool $post): void {
                 db()->prepare("INSERT INTO users (email, name, password_hash, role, artist_slug, must_change_password) VALUES (?, ?, ?, 'artist', ?, 1)")
                     ->execute([$email, $a['name'], password_hash($pw, PASSWORD_DEFAULT), $a['slug']]);
                 $q = db()->prepare('SELECT * FROM users WHERE email = ?'); $q->execute([$email]);
-                admin_view('admin/credentials', ['user' => $q->fetch(), 'password' => $pw, 'artist' => $a]);
+                // Activation automatique de <slug>.sevencom.tech sur Hostinger (sous-domaine + SSL)
+                try { $site = provision_artist_site($a['slug']); } catch (\Throwable $ex) { $site = ['step' => 'error_subdomain', 'message' => 'Activation impossible pour le moment : réessayez depuis Hébergement.']; }
+                admin_view('admin/credentials', ['user' => $q->fetch(), 'password' => $pw, 'artist' => $a, 'site' => $site]);
                 return;
             }
             flash('Fiche enregistrée. Le site est déjà à jour.');

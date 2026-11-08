@@ -39,6 +39,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
           <a href="<?= e(url(null, '/admin/label')) ?>">Label &amp; outils</a>
           <a href="<?= e(url(null, '/admin/messages')) ?>">Messages<?php $nm = (int)App\db()->query('SELECT COUNT(*) FROM submissions WHERE handled = 0')->fetchColumn(); if ($nm): ?> <span class="badge"><?= $nm ?></span><?php endif; ?></a>
           <a href="<?= e(url(null, '/admin/contrats')) ?>">Contrats</a>
+          <a href="<?= e(url(null, '/admin/hebergement')) ?>">Hébergement</a>
         <?php elseif ($me['artist_slug']): ?>
           <a href="<?= e(url(null, '/admin/artistes/' . $me['artist_slug'])) ?>">Ma fiche</a>
         <?php endif; ?>

@@ -40,6 +40,11 @@ Les déploiements GitHub n'y touchent jamais. Au tout premier lancement, la base
 - **Planificateur de sorties** (`/admin/planning`, admin et artistes) : un rétroplanning par sortie, étapes J-60 → J+14 calculées depuis la date de sortie, étapes en retard signalées, export des échéances vers un agenda (`.ics`), ajout possible de la sortie à la fiche artiste. Code : `app/planner.php`, vues `app/views/admin/plans.php` et `plan_form.php`. Les étapes proposées par défaut sont dans `PLAN_TEMPLATE`.
 - Les outils intégrés apparaissent en tête de la page publique `/outils` (`builtin_tools()` dans `app/bootstrap.php`), avant ceux saisis dans « Label & outils ».
 
+## Adresses des artistes automatiques (admin › Hébergement)
+
+- Une fois pour toutes : entrée DNS `A * → 147.93.93.251` chez Infomaniak, et une clé d'API Hostinger collée dans **admin › Hébergement** (rangée dans `storage/hostinger.json`, hors du site, jamais réaffichée).
+- Ensuite, à la création d'un artiste, le site déclare `<slug>.sevencom.tech` sur Hostinger (même dossier) puis demande le certificat SSL dès que l'adresse répond au DNS. Les SSL en attente sont relancés automatiquement (au plus toutes les 10 min) à chaque visite de l'admin. Code : `app/hosting.php`.
+
 ## Ajouter un nouvel artiste (ancienne méthode, remplacée par l'admin)
 
 1. Copier `data/artists/christiankayembe.json` en `data/artists/<slug>.json` et modifier `slug`, nom, bio, sorties, réseaux.
