@@ -1,6 +1,6 @@
 [
   { "name": "Distribution", "summary": "Mise en ligne des sorties sur Spotify, Apple Music, Deezer, YouTube Music et plus.", "status": "Bientôt", "cta": "En savoir plus" },
-  { "name": "Promotion", "summary": "Campagnes réseaux sociaux, pré-saves, liens intelligents et suivi des statistiques.", "status": "Bientôt" },
+  { "name": "Promotion", "summary": "Avec Udhibiti PromoLien : un lien d'écoute pour chaque sortie (toutes les plateformes), pré-saves, annonce aux fans et statistiques des clics.", "status": "Disponible", "url": "https://promolien.udhibiti.com", "cta": "Ouvrir PromoLien" },
   { "name": "Gestion d'artiste", "summary": "Agenda, booking, contrats et royalties centralisés pour chaque artiste du label.", "status": "Bientôt" },
   { "name": "Site artiste", "summary": "Chaque artiste reçoit son site sur artiste.sevencom.tech, relié au portail du label.", "status": "Disponible" }
 ]

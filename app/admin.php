@@ -162,13 +162,13 @@ function admin_artist(?string $slug, bool $post): void {
             $kind = post_str('kind', 20);
             $a['kind'] = isset(KINDS[$kind]) ? $kind : 'solo';
             $a['name'] = post_str('name', 120);
-            $a['tagline'] = post_str('tagline', 300);
+            $a['tagline'] = strip_contacts(post_str('tagline', 300));
             $a['genre'] = post_str('genre', 80);
             $a['city'] = post_str('city', 80);
             $a['booking'] = filter_var(post_str('booking', 200), FILTER_VALIDATE_EMAIL) ?: '';
             $accent = post_str('accent', 7);
             $a['theme']['accent'] = preg_match('/^#[0-9a-f]{6}$/i', $accent) ? $accent : '#2c6e9e';
-            $a['bio'] = array_values(array_filter(array_map('trim', preg_split('/\R\s*\R/', post_str('bio', 10000)))));
+            $a['bio'] = array_values(array_filter(array_map('App\\strip_contacts', preg_split('/\R\s*\R/', post_str('bio', 10000)))));
             if ($p = upload_image($_FILES['photo'] ?? null)) { $a['photo'] = $p; $a['cover'] = $p; }
             elseif (post_str('photo_current', 300) && str_starts_with(post_str('photo_current', 300), '/')) { $a['photo'] = $a['cover'] = post_str('photo_current', 300); }
             if ($p = upload_image($_FILES['logo'] ?? null)) $a['logo'] = $p;

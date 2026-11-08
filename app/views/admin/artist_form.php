@@ -84,7 +84,8 @@ $videoRows = array_map(fn($v) => ['title' => $v['title'], 'url' => 'https://yout
       <?php $name = 'events'; $rows = $a['events'] ?? []; $fields = ['date' => ['Date', 'text'], 'venue' => ['Lieu', 'text'], 'city' => ['Ville', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>
 
-    <fieldset><legend>Réseaux sociaux</legend>
+    <fieldset><legend>Réseaux sociaux et pages d'écoute</legend>
+      <p class="small">Mettez l'adresse complète de la page de l'artiste (pas l'accueil de la plateforme). <strong>Deezer et Apple Music</strong> sont les plus importantes : Udhibiti PromoLien y repère chaque nouvelle sortie et crée son lien d'écoute tout seul. Spotify, YouTube, Boomplay et Audiomack aident aussi.</p>
       <?php $name = 'socials'; $rows = $socialRows; $fields = ['name' => ['Réseau (Instagram, TikTok…)', 'text'], 'url' => ['Lien', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>
 
