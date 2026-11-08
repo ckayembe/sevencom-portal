@@ -3,6 +3,7 @@ RewriteEngine On
 
 # Code et données jamais accessibles depuis le web
 RewriteRule ^(app|data)(/|$) - [F,L]
+RewriteRule ^(README\.md|\.git) - [F,L]
 
 # Force HTTPS
 RewriteCond %{HTTPS} off
