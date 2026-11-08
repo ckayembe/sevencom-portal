@@ -104,6 +104,7 @@ function about(): array {
 function slides(): array {
     $s = [];
     foreach (label()['slides'] ?? [] as $x) if (!empty($x['title']) || !empty($x['image'])) $s[] = $x + ['kicker' => 'À la une'];
+    $s[] = ['kicker' => 'Le label', 'title' => 'Le chiffre de votre réussite', 'text' => label()['tagline'] ?? '', 'image' => '/assets/img/logo-full.webp', 'fit' => 'contain', 'link' => url(null, '/a-propos')];
     foreach (artists() as $a) {
         $img = (!empty($a['photo']) && !str_contains($a['photo'], 'placeholder')) ? $a['photo'] : ($a['logo'] ?? '');
         $s[] = ['kicker' => KINDS[$a['kind'] ?? 'solo'] === KINDS['solo'] ? 'Artiste' : KINDS[$a['kind']], 'title' => $a['name'], 'text' => $a['tagline'] ?? '',

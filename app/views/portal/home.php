@@ -1,22 +1,20 @@
 <?php use function App\{e, url, label, artists, tools, all_releases, all_videos, key_figures, contract_formulas, about}; $L = label();
 $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(), 0, 2); $figs = key_figures(); ?>
-<h1 class="visually-hidden"><?= e($L['name']) ?> · <?= e($L['tagline']) ?></h1>
 <?php require __DIR__ . '/_audio_history.php'; ?>
 
-<section class="verse">
-  <blockquote>« Chantez à l'Éternel un cantique nouveau ! Chantez à l'Éternel, vous tous, habitants de la terre ! »</blockquote>
-  <cite>Psaume 96.1</cite>
-</section>
-
-<?php require __DIR__ . '/_carousel.php'; ?>
-
-<section class="hero hero-after">
+<section class="hero">
+  <h1 class="visually-hidden"><?= e($L['name']) ?></h1>
+  <div class="hero-logo-wrap" style="--logo:url('<?= e($L['logo']) ?>')">
+    <img class="hero-logo" src="<?= e($L['logo']) ?>" alt="<?= e($L['name']) ?> · <?= e($L['slogan']) ?>">
+    <span class="sheen" aria-hidden="true"></span>
+  </div>
   <p class="slogan"><?= e($L['tagline']) ?></p>
   <p class="rotator-line" aria-label="Nous produisons la louange, l'adoration, le gospel, les chorales">Nous produisons <span class="rotator" data-words="la louange|l'adoration|le gospel|les chorales|votre message">la louange</span></p>
   <p class="lead"><?= e($L['description']) ?></p>
   <p class="hero-actions"><a class="btn" href="<?= e(url(null, '/artistes')) ?>">Découvrir nos artistes</a>
      <a class="btn ghost" href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a></p>
 </section>
+<?php require __DIR__ . '/_carousel.php'; ?>
 <div class="marquee" aria-hidden="true"><div class="marquee-track">
   <?php $words = ['Louange', 'Adoration', 'Gospel', 'Chorales', 'Production', 'Clips', 'Promotion', 'Distribution', 'Booking'];
   for ($k = 0; $k < 2; $k++) foreach ($words as $w) echo '<span>' . e($w) . '</span>'; ?>
@@ -95,9 +93,13 @@ $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(
   <p><a href="<?= e(url(null, '/outils')) ?>">Voir tous les outils →</a></p>
 </section>
 
-<section class="cta-band home-contact">
+<section class="verse">
+  <blockquote>« Chantez à l'Éternel un cantique nouveau ! Chantez à l'Éternel, vous tous, habitants de la terre ! »</blockquote>
+  <cite>Psaume 96.1</cite>
+</section>
+
+<section class="cta-band">
   <h2>Vous servez Dieu par la musique ?</h2>
-  <p>Envoyez-nous vos titres, invitez nos artistes ou proposez un partenariat : nous répondons à chaque message.</p>
-  <p><a class="btn pulse" href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a> <a class="btn ghost" href="<?= e(url(null, '/demo?objet=booking')) ?>">Booking</a> <a class="btn ghost" href="<?= e(url(null, '/contact')) ?>">Contact</a></p>
-  <p class="small"><a href="mailto:<?= e($L['email']) ?>"><?= e($L['email']) ?></a></p>
+  <p>Envoyez-nous vos titres : nous écoutons chaque démo et revenons vers vous.</p>
+  <p><a class="btn pulse" href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a></p>
 </section>

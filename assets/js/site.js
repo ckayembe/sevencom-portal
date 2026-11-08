@@ -65,7 +65,7 @@
     var y = window.scrollY;
     if (header) header.classList.toggle('scrolled', y > 40);
     if (recede) {
-      var h = hero.offsetHeight || 1, k = Math.min(Math.max(y / h, 0), 1);
+      var h = hero.offsetHeight || 1, k = Math.min(Math.max(-hero.getBoundingClientRect().top / h, 0), 1);
       hero.style.setProperty('--hz', (-k * 420).toFixed(1) + 'px');
       hero.style.setProperty('--hy', (k * h * 0.12).toFixed(1) + 'px');
       hero.style.setProperty('--hr', (k * 10).toFixed(2) + 'deg');
