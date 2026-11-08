@@ -13,6 +13,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="<?= e(asset('/assets/css/style.css')) ?>">
+<script src="<?= e(asset('/assets/js/site.js')) ?>" defer></script>
 <style>:root{--accent:<?= e($accent) ?>}</style>
 </head>
 <body class="<?= e($section) ?>">
@@ -51,6 +52,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
   <header class="site">
     <a href="<?= e(url()) ?>" class="brand"><img src="/assets/img/logo-mark.webp" alt=""><?= e($L['name']) ?></a>
     <nav>
+      <a href="<?= e(url(null, '/a-propos')) ?>">Le label</a>
       <a href="<?= e(url(null, '/artistes')) ?>">Artistes</a>
       <a href="<?= e(url(null, '/sorties')) ?>">Sorties</a>
       <a href="<?= e(url(null, '/clips')) ?>">Clips</a>

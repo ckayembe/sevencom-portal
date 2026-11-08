@@ -80,3 +80,22 @@ function notify_submission(array $v): void {
     $headers = "Content-Type: text/plain; charset=UTF-8\r\nFrom: Seven.com <$to>\r\nReply-To: " . str_replace(["\r", "\n"], '', $v['email']);
     @mail($to, $subject, $body, $headers);
 }
+
+/** Textes « Qui sommes-nous » : ceux de l'admin, sinon ces textes par défaut. */
+function about(): array {
+    $d = [
+        'intro' => "Seven.com est un label de production dédié aux artistes chrétiens. Nous accompagnons chanteurs, groupes et chorales pour que leur louange sorte de l'église et touche le plus grand nombre, avec une qualité professionnelle.",
+        'mission' => "Révéler, produire et faire rayonner les artistes chrétiens : de l'enregistrement à la diffusion sur toutes les plateformes, en passant par l'image, la promotion et la scène.",
+        'vision' => "Devenir la maison de référence de la musique chrétienne, depuis la RDC jusqu'à la diaspora, où chaque artiste trouve les outils et l'accompagnement pour vivre de son appel.",
+        'story' => "Seven.com a été fondé par Christian Kayembe, artiste chrétien, avec une conviction : les artistes chrétiens méritent un accompagnement professionnel, des outils modernes et un cadre qui respecte leur foi. Le chiffre sept, symbole biblique de plénitude, résume notre ambition : « le chiffre de votre réussite ».",
+        'values' => [
+            ['title' => 'La foi d\'abord', 'text' => 'Chaque projet sert un message. Nous ne produisons que ce qui honore Dieu et édifie ceux qui l\'écoutent.'],
+            ['title' => 'L\'excellence', 'text' => 'Un son, une image et une communication au niveau des grands labels, parce que le message le mérite.'],
+            ['title' => 'La transparence', 'text' => 'Des contrats clairs, des formules lisibles et des comptes rendus réguliers à chaque artiste.'],
+            ['title' => 'L\'accompagnement', 'text' => 'Nous faisons grandir l\'artiste dans la durée : carrière, image, scène, et vie spirituelle.'],
+        ],
+    ];
+    $a = label()['about'] ?? [];
+    foreach ($d as $k => $v) if (empty($a[$k])) $a[$k] = $v;
+    return $a;
+}

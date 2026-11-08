@@ -14,6 +14,15 @@ $socialRows = []; foreach (($L['socials'] ?? []) as $n => $u) $socialRows[] = ['
     <fieldset><legend>Réseaux sociaux du label</legend>
       <?php $name = 'socials'; $rows = $socialRows; $fields = ['name' => ['Réseau', 'text'], 'url' => ['Lien', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>
+    <?php $ab = App\about(); ?>
+    <fieldset><legend>Qui sommes-nous (page « Le label »)</legend>
+      <label>Présentation courte<textarea name="about_intro" rows="3"><?= e($ab['intro']) ?></textarea></label>
+      <label>Notre mission<textarea name="about_mission" rows="3"><?= e($ab['mission']) ?></textarea></label>
+      <label>Notre vision<textarea name="about_vision" rows="3"><?= e($ab['vision']) ?></textarea></label>
+      <label>Notre histoire<textarea name="about_story" rows="5"><?= e($ab['story']) ?></textarea></label>
+      <p class="small">Nos valeurs</p>
+      <?php $name = 'values'; $rows = $ab['values']; $fields = ['title' => ['Valeur', 'text'], 'text' => ['Explication', 'textarea']]; require __DIR__ . '/_rows.php'; ?>
+    </fieldset>
     <fieldset><legend>Chiffres clés (page d'accueil)</legend>
       <p class="small">Le nombre d'artistes, de sorties et de clips est calculé automatiquement. Ajoutez ici d'autres chiffres réels, par exemple « 150K+ » vues YouTube.</p>
       <?php $name = 'stats'; $rows = $L['stats'] ?? []; $fields = ['value' => ['Chiffre', 'text'], 'label' => ['Libellé', 'text']]; require __DIR__ . '/_rows.php'; ?>

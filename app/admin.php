@@ -254,6 +254,8 @@ function admin_label(bool $post): void {
             if ($r['name'] === '') continue;
             $tools[] = ['name' => $r['name'], 'summary' => $r['summary'], 'status' => $r['status'], 'url' => clean_url($r['url']), 'cta' => $r['cta']];
         }
+        $L['about'] = ['intro' => post_str('about_intro', 2000), 'mission' => post_str('about_mission', 2000), 'vision' => post_str('about_vision', 2000), 'story' => post_str('about_story', 4000), 'values' => []];
+        foreach (post_rows('values', ['title', 'text']) as $r) if ($r['title'] !== '') $L['about']['values'][] = ['title' => $r['title'], 'text' => $r['text']];
         $L['stats'] = [];
         foreach (post_rows('stats', ['value', 'label']) as $r) if ($r['value'] !== '' && $r['label'] !== '') $L['stats'][] = ['value' => $r['value'], 'label' => $r['label']];
         save_setting('label', $L); save_setting('tools', $tools);

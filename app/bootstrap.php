@@ -83,6 +83,7 @@ function run(): void {
             '/outils' => 'portal/tools',
             '/contact' => 'portal/contact',
             '/formules' => 'portal/formules',
+            '/a-propos' => 'portal/about',
             '/sorties' => 'portal/releases',
             '/clips' => 'portal/videos',
         ];
