@@ -333,3 +333,77 @@ header.site nav a:hover::after{right:0}
 body{position:relative;z-index:0}
 .no-anim .depth-bg{display:none}
 .carousel3d{z-index:1}
+
+/* ---------- Frise animée des supports audio ---------- */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes groove{to{stroke-dashoffset:-40}}
+@keyframes eqb{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@keyframes ring{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.3);opacity:0}}
+@keyframes prog{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+@keyframes laser{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes wave{0%,100%{opacity:.15}50%{opacity:.9}}
+.audio-history{padding:0;margin:0 -16px}
+.ah-pin{height:calc(var(--n) * 70vh + 100vh);position:relative}
+.ah-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto auto;padding:84px 16px 22px}
+.ah-head{text-align:center;position:relative;z-index:2}
+.ah-title{margin:.1em 0 0}
+.ah-year{position:absolute;left:50%;top:52%;translate:-50% -50%;font-family:Anton,sans-serif;font-size:clamp(9rem,30vw,24rem);line-height:1;color:transparent;
+  -webkit-text-stroke:2px rgba(31,90,135,.13);letter-spacing:.02em;pointer-events:none;font-variant-numeric:tabular-nums;
+  text-shadow:0 2px 0 rgba(255,255,255,.6)}
+.ah-stage{position:relative}
+.ah-item{position:absolute;left:50%;top:50%;width:min(760px,88vw);translate:-50% -50%;display:grid;grid-template-columns:minmax(180px,300px) 1fr;gap:28px;align-items:center;
+  transform-style:preserve-3d;will-change:transform,opacity,filter}
+.ah-art{aspect-ratio:1;color:var(--ink);filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 -1px 0 rgba(16,45,72,.35)) drop-shadow(0 18px 24px rgba(16,45,72,.18))}
+.ah-art svg{width:100%;height:100%;overflow:visible}
+.ah-art .fillp{fill:rgba(255,255,255,.35)}
+.ah-art .filld{fill:var(--ink);fill-opacity:.92}
+.ah-art .cd{fill:url(#cdgrad)}
+.ah-body h3{font-size:clamp(1.6rem,3.4vw,2.4rem);margin:.1em 0 .3em}
+.ah-body p{margin:.3em 0;color:var(--text)}
+.ah-date{font-family:Anton,sans-serif;font-size:1.3rem;color:var(--accent);display:flex;gap:.8em;align-items:baseline;margin:0!important}
+.ah-date span{font-family:Montserrat,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ah-facts{list-style:none;padding:0;margin:.9em 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.ah-facts li{font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:20px;color:var(--ink);box-shadow:inset 0 1px 2px rgba(16,45,72,.28),inset 0 -1px 0 var(--hi)}
+.ah-body>*{transition:opacity .6s ease,transform .7s cubic-bezier(.16,.84,.24,1)}
+.ah-item:not(.on) .ah-body>*{opacity:0;transform:translateY(14px)}
+.ah-item.on .ah-body>*:nth-child(2){transition-delay:.06s}.ah-item.on .ah-body>*:nth-child(3){transition-delay:.12s}.ah-item.on .ah-body>*:nth-child(4){transition-delay:.18s}
+/* Objets qui vivent */
+.ah-art .spin{transform-box:fill-box;transform-origin:center;animation:spin 2.4s linear infinite}
+.ah-art .spin.slow{animation-duration:3.6s}
+.ah-art .grooves{animation:groove 1.2s linear infinite}
+.ah-art .grooves.rev{animation-direction:reverse}
+.ah-art .eq path{transform-box:fill-box;transform-origin:bottom;animation:eqb .9s ease-in-out infinite}
+.ah-art .eq path:nth-child(2){animation-delay:-.3s}.ah-art .eq path:nth-child(3){animation-delay:-.6s}.ah-art .eq path:nth-child(4){animation-delay:-.15s}.ah-art .eq path:nth-child(5){animation-delay:-.45s}
+.ah-art .rings circle{transform-box:fill-box;transform-origin:center;animation:ring 2.4s ease-out infinite}
+.ah-art .rings circle:nth-child(2){animation-delay:.8s}.ah-art .rings circle:nth-child(3){animation-delay:1.6s}
+.ah-art .prog{stroke-dasharray:60;animation:prog 4s linear infinite}
+.ah-art .laser{animation:laser 1.4s ease-in-out infinite}
+.ah-art .waves path{animation:wave 1.6s ease-in-out infinite}.ah-art .waves path:nth-child(even){animation-delay:.4s}
+.ah-art .wheel{transform-box:view-box;transform-origin:100px 134px;animation:spin 3s linear infinite}
+.ah-art .horn{transform-box:fill-box;transform-origin:20% 90%;animation:float 3s ease-in-out infinite}
+.ah-item:not(.on) .ah-art *{animation-play-state:paused}
+/* Axe du temps avec bras de lecture */
+.ah-axis{position:relative;height:56px;margin:0 auto;width:min(980px,100%)}
+.ah-line{position:absolute;left:0;right:0;top:12px;height:3px;border-radius:2px;box-shadow:inset 0 1px 1px rgba(16,45,72,.3),0 1px 0 var(--hi)}
+.ah-fill{position:absolute;left:0;top:0;bottom:0;width:calc(var(--p,0) * 100%);background:linear-gradient(90deg,var(--ink-light),var(--ink));border-radius:2px}
+.ah-tick{position:absolute;top:24px;left:calc(var(--i) / (var(--n) - 1) * 100%);translate:-50% 0;font-size:.7rem;font-weight:700;color:var(--muted);transition:color .3s,transform .3s}
+.ah-tick::before{content:"";position:absolute;left:50%;top:-16px;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px rgba(31,90,135,.4)}
+.ah-tick.on{color:var(--ink);transform:scale(1.25)}
+.ah-tick.on::before{background:var(--ink-light);box-shadow:0 0 0 4px rgba(90,166,216,.25)}
+.ah-needle{position:absolute;top:2px;left:calc(var(--p,0) * 100%);width:22px;height:22px;margin-left:-11px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff,#5aa6d8 45%,#1f5a87);box-shadow:0 3px 8px rgba(16,45,72,.35)}
+.ah-end{text-align:center;font-size:.9rem;color:var(--muted);margin:8px 0 0;transition:opacity .5s}
+@media (max-width:700px){
+  .ah-sticky{padding-top:70px}
+  .ah-item{grid-template-columns:1fr;gap:8px;text-align:center;width:86vw}
+  .ah-art{width:min(46vw,190px);margin:0 auto}
+  .ah-date{justify-content:center;flex-wrap:wrap}.ah-facts{justify-content:center}
+  .ah-body p{font-size:.88rem;line-height:1.5}
+  .ah-tick{font-size:0}.ah-tick.on{font-size:.7rem}
+}
+/* Sans animation : liste simple */
+.no-anim .ah-pin{height:auto}
+.no-anim .ah-sticky{position:static;height:auto;overflow:visible;display:block}
+.no-anim .ah-year,.no-anim .ah-axis{display:none}
+.no-anim .ah-item{position:relative;left:auto;top:auto;translate:none;margin:40px auto}
+.no-anim .ah-item .ah-body>*{opacity:1;transform:none}

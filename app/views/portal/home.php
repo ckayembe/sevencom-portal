@@ -91,6 +91,8 @@ $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(
   <p><a href="<?= e(url(null, '/outils')) ?>">Voir tous les outils →</a></p>
 </section>
 
+<?php require __DIR__ . '/_audio_history.php'; ?>
+
 <section class="verse">
   <blockquote>« Chantez à l'Éternel un cantique nouveau ! Chantez à l'Éternel, vous tous, habitants de la terre ! »</blockquote>
   <cite>Psaume 96.1</cite>

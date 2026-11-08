@@ -34,6 +34,7 @@
   <?php foreach ($figs as $f): ?><div class="figure"><strong><?= e($f['value']) ?></strong><span><?= e($f['label']) ?></span></div><?php endforeach; ?>
 </section>
 <?php endif; ?>
+<section><h2>L'histoire du son</h2><p>Du phonographe au streaming : découvrez en animation près de 150 ans de supports audio.</p><p><a class="btn ghost" href="<?= e(url(null, '/histoire-du-son')) ?>">Voyager dans le temps</a></p></section>
 <section class="cta-band">
   <h2>Rejoindre l'aventure</h2>
   <p>Artiste, groupe, chorale, église ou partenaire : parlons de votre projet.</p>

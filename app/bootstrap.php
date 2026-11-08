@@ -84,6 +84,7 @@ function run(): void {
             '/contact' => 'portal/contact',
             '/formules' => 'portal/formules',
             '/a-propos' => 'portal/about',
+            '/histoire-du-son' => 'portal/history',
             '/sorties' => 'portal/releases',
             '/clips' => 'portal/videos',
         ];

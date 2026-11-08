@@ -184,3 +184,45 @@
   document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
   apply(); start();
 })();
+
+/* Frise des supports audio : défilement vertical -> voyage en profondeur d'un support à l'autre.
+   L'année géante compte d'une date à l'autre, le bras de lecture avance, et les disques tournent plus vite quand on défile vite. */
+(function () {
+  var box = document.querySelector('.audio-history');
+  if (!box || document.documentElement.classList.contains('no-anim')) return;
+  var pin = box.querySelector('.ah-pin'), items = [].slice.call(box.querySelectorAll('.ah-item')), ticks = [].slice.call(box.querySelectorAll('.ah-tick'));
+  var yearEl = box.querySelector('.ah-year'), axis = box.querySelector('.ah-axis'), n = items.length;
+  var years = items.map(function (it) { return parseInt(it.querySelector('.ah-date').firstChild.nodeValue, 10); });
+  var last = -1, lastY = window.scrollY, speed = 1, raf = null;
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function render() {
+    raf = null;
+    var r = pin.getBoundingClientRect(), total = pin.offsetHeight - window.innerHeight;
+    var p = clamp(-r.top / total, 0, 1), f = p * (n - 1);
+    var narrow = window.innerWidth < 700;
+    items.forEach(function (it, i) {
+      var d = i - f, ad = Math.abs(d);
+      var x = d * (narrow ? 70 : 58), z = -ad * 520, ry = clamp(-d * 32, -60, 60), sc = 1 - Math.min(ad, 2) * 0.06;
+      it.style.transform = 'perspective(1300px) translate3d(' + x + '%,0,' + z + 'px) rotateY(' + ry + 'deg) scale(' + sc + ')';
+      it.style.opacity = clamp(1 - ad * 0.8, 0, 1).toFixed(3);
+      it.style.filter = ad > 0.05 ? 'blur(' + Math.min(ad * 5, 8).toFixed(1) + 'px)' : 'none';
+      it.style.zIndex = 100 - Math.round(ad * 10);
+      it.style.visibility = ad > 1.6 ? 'hidden' : 'visible';
+    });
+    var k = Math.round(f);
+    if (k !== last) { items.forEach(function (it, i) { it.classList.toggle('on', i === k); }); ticks.forEach(function (t, i) { t.classList.toggle('on', i === k); }); last = k; }
+    var a = Math.floor(f), b = Math.min(a + 1, n - 1), t = f - a, eased = t * t * (3 - 2 * t);
+    yearEl.textContent = Math.round(years[a] + (years[b] - years[a]) * eased);
+    yearEl.style.transform = 'translate3d(' + (-(t - .5) * 6).toFixed(2) + '%,0,0) scale(' + (1 + Math.sin(t * Math.PI) * 0.06).toFixed(3) + ')';
+    axis.style.setProperty('--p', p.toFixed(4));
+    // Vitesse de défilement -> vitesse de rotation des disques et bobines
+    var v = Math.abs(window.scrollY - lastY); lastY = window.scrollY;
+    speed += (clamp(1 + v * 0.08, 1, 7) - speed) * 0.25;
+    if (box.getAnimations) box.getAnimations({ subtree: true }).forEach(function (an) { an.playbackRate = speed; });
+    if (speed > 1.02) raf = requestAnimationFrame(render);
+  }
+  box.style.setProperty('--n', n);
+  window.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(render); }, { passive: true });
+  window.addEventListener('resize', render);
+  render();
+})();
