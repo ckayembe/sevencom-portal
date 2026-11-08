@@ -53,6 +53,14 @@ function migrate(PDO $pdo): void {
             last_login_at TEXT
         );
         CREATE TABLE IF NOT EXISTS login_attempts (ip TEXT NOT NULL, at INTEGER NOT NULL);
+        CREATE TABLE IF NOT EXISTS submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            kind TEXT NOT NULL,
+            data TEXT NOT NULL,
+            ip TEXT NOT NULL,
+            handled INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
     SQL);
 
     // Premier lancement : on importe le contenu de data/*.json et on crée le compte admin.

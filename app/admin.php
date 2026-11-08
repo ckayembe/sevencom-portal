@@ -29,6 +29,14 @@ function admin_route(string $path): bool {
         case (bool)preg_match('#^/admin/artistes/([a-z0-9-]+)$#', $path, $m):
             if (!can_edit_artist($m[1])) { forbidden(); return true; }
             admin_artist($m[1], $post); return true;
+        case $path === '/admin/messages':
+            require_admin();
+            admin_view('admin/messages', ['rows' => db()->query('SELECT * FROM submissions ORDER BY handled, id DESC LIMIT 300')->fetchAll()]);
+            return true;
+        case (bool)preg_match('#^/admin/messages/(\d+)/traite$#', $path, $m) && $post:
+            require_admin();
+            db()->prepare('UPDATE submissions SET handled = 1 - handled WHERE id = ?')->execute([(int)$m[1]]);
+            redirect('/admin/messages'); return true;
         case $path === '/admin/contrats':
             require_admin(); admin_view('admin/contracts', ['c' => contract_sections(), 'artists' => all_artists(true)]); return true;
         case (bool)preg_match('#^/admin/contrats/([1-9])$#', $path, $m):
@@ -246,6 +254,8 @@ function admin_label(bool $post): void {
             if ($r['name'] === '') continue;
             $tools[] = ['name' => $r['name'], 'summary' => $r['summary'], 'status' => $r['status'], 'url' => clean_url($r['url']), 'cta' => $r['cta']];
         }
+        $L['stats'] = [];
+        foreach (post_rows('stats', ['value', 'label']) as $r) if ($r['value'] !== '' && $r['label'] !== '') $L['stats'][] = ['value' => $r['value'], 'label' => $r['label']];
         save_setting('label', $L); save_setting('tools', $tools);
         flash('Informations du label enregistrées.');
         redirect('/admin/label'); return;

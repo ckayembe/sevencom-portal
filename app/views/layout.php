@@ -36,6 +36,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
         <?php if ($me['role'] === 'admin'): ?>
           <a href="<?= e(url(null, '/admin')) ?>">Artistes</a>
           <a href="<?= e(url(null, '/admin/label')) ?>">Label &amp; outils</a>
+          <a href="<?= e(url(null, '/admin/messages')) ?>">Messages<?php $nm = (int)App\db()->query('SELECT COUNT(*) FROM submissions WHERE handled = 0')->fetchColumn(); if ($nm): ?> <span class="badge"><?= $nm ?></span><?php endif; ?></a>
           <a href="<?= e(url(null, '/admin/contrats')) ?>">Contrats</a>
         <?php elseif ($me['artist_slug']): ?>
           <a href="<?= e(url(null, '/admin/artistes/' . $me['artist_slug'])) ?>">Ma fiche</a>
@@ -51,14 +52,17 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
     <a href="<?= e(url()) ?>" class="brand"><img src="/assets/img/logo-mark.webp" alt=""><?= e($L['name']) ?></a>
     <nav>
       <a href="<?= e(url(null, '/artistes')) ?>">Artistes</a>
-      <a href="<?= e(url(null, '/outils')) ?>">Outils</a>
+      <a href="<?= e(url(null, '/sorties')) ?>">Sorties</a>
+      <a href="<?= e(url(null, '/clips')) ?>">Clips</a>
       <a href="<?= e(url(null, '/formules')) ?>">Formules</a>
+      <a href="<?= e(url(null, '/outils')) ?>">Outils</a>
       <a href="<?= e(url(null, '/contact')) ?>">Contact</a>
     </nav>
   </header>
 <?php endif; ?>
 <main><?= $content ?></main>
 <footer class="site">
+  <p class="footer-links"><a href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a> · <a href="<?= e(url(null, '/demo?objet=booking')) ?>">Booking</a> · <a href="<?= e(url(null, '/formules')) ?>">Nos formules</a> · <a href="<?= e(url(null, '/contact')) ?>">Contact</a></p>
   <p>© <?= date('Y') ?> <a href="<?= e(url()) ?>"><?= e($L['name']) ?></a> · <?= e($L['tagline']) ?></p>
   <p class="small"><?php foreach (artists() as $a): ?><a href="<?= e(url($a['slug'])) ?>"><?= e($a['slug']) ?>.<?= e(App\config()['domain']) ?></a> <?php endforeach; ?></p>
 </footer>

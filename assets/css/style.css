@@ -147,3 +147,22 @@ fieldset.import{background:rgba(90,166,216,.10)}
   .doc mark{background:none;border-bottom:1px dotted #555}
   main{padding:0!important}
 }
+
+/* Rubriques du portail */
+.figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;border-top:1px solid rgba(0,0,0,.15);border-bottom:1px solid rgba(0,0,0,.15);padding:0}
+.figure{padding:1.4rem 1rem;border-right:1px solid rgba(0,0,0,.1)}
+.figure:last-child{border-right:0}
+.figure strong{display:block;font-family:Anton,sans-serif;font-size:2.6rem;line-height:1;color:var(--accent);text-shadow:0 1px 0 rgba(255,255,255,.8),0 -1px 0 rgba(0,0,0,.15)}
+.figure span{display:block;margin-top:.4em;text-transform:uppercase;letter-spacing:.08em;font-size:.75rem}
+.release img{aspect-ratio:1;object-fit:cover}
+.clips{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.clip{margin:0}
+.clip figcaption{margin-top:.5em;font-size:.92em}
+.cta-band{text-align:center;padding:3rem 1rem;border-top:1px solid rgba(0,0,0,.15)}
+.cta-band h2{font-size:clamp(2rem,5vw,3.2rem)}
+.footer-links a{margin:0 .2em}
+.hp{position:absolute;left:-9999px}
+.errors{border-left:4px solid #b3261e;padding:.4em 1em;background:rgba(255,255,255,.5)}
+.badge{display:inline-block;min-width:1.4em;padding:0 .35em;border-radius:1em;background:#b3261e;color:#fff;font-size:.75em;text-align:center}
+.message.handled{opacity:.55}
+@media (max-width:640px){.clips{grid-template-columns:1fr}.figure{border-right:0;border-bottom:1px solid rgba(0,0,0,.1)}}

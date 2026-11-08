@@ -14,6 +14,10 @@ $socialRows = []; foreach (($L['socials'] ?? []) as $n => $u) $socialRows[] = ['
     <fieldset><legend>Réseaux sociaux du label</legend>
       <?php $name = 'socials'; $rows = $socialRows; $fields = ['name' => ['Réseau', 'text'], 'url' => ['Lien', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>
+    <fieldset><legend>Chiffres clés (page d'accueil)</legend>
+      <p class="small">Le nombre d'artistes, de sorties et de clips est calculé automatiquement. Ajoutez ici d'autres chiffres réels, par exemple « 150K+ » vues YouTube.</p>
+      <?php $name = 'stats'; $rows = $L['stats'] ?? []; $fields = ['value' => ['Chiffre', 'text'], 'label' => ['Libellé', 'text']]; require __DIR__ . '/_rows.php'; ?>
+    </fieldset>
     <fieldset><legend>Outils du label</legend>
       <?php $name = 'tools'; $rows = $tools; $fields = ['name' => ['Nom', 'text'], 'summary' => ['Description', 'textarea'], 'status' => ['Statut (Disponible, Bientôt…)', 'text'], 'url' => ['Lien', 'text'], 'cta' => ['Texte du bouton', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>

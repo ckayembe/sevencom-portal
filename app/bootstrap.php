@@ -17,6 +17,7 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/import.php';
 require __DIR__ . '/contracts.php';
+require __DIR__ . '/portal.php';
 
 function label(): array { static $l; return $l ??= setting('label'); }
 function tools(): array { static $t; return $t ??= setting('tools'); }
@@ -82,7 +83,10 @@ function run(): void {
             '/outils' => 'portal/tools',
             '/contact' => 'portal/contact',
             '/formules' => 'portal/formules',
+            '/sorties' => 'portal/releases',
+            '/clips' => 'portal/videos',
         ];
+        if ($path === '/demo') { demo_page(); return; }
         if (isset($routes[$path])) { render($routes[$path], ['section' => 'portal']); return; }
         // Site artiste aussi accessible via sevencom.tech/artistes/<slug> (utile avant l'activation du sous-domaine)
         if (preg_match('#^/artistes/([a-z0-9-]+)$#', $path, $m) && ($artist = artist($m[1]))) {
