@@ -71,6 +71,11 @@ $items = [
    'svg' => "<g class='rings' fill='none' stroke='currentColor' stroke-width='2'><circle cx='100' cy='106' r='40'/><circle cx='100' cy='106' r='40'/><circle cx='100' cy='106' r='40'/></g>
      <g $S><path d='M44 118 V96 A56 56 0 0 1 156 96 V118' stroke-width='6'/><rect x='30' y='108' width='30' height='52' rx='10' class='filld'/><rect x='140' y='108' width='30' height='52' rx='10' class='filld'/>
      <circle cx='100' cy='108' r='4' fill='currentColor'/></g>"],
+  ['year' => (int)date('Y'), 'name' => 'Seven.com', 'who' => 'Le chiffre de votre réussite', 'seven' => true,
+   'text' => "Nous servons Dieu par la musique. Seven.com accompagne les artistes chrétiens et fait rayonner leur louange dans tous les formats actuels : plateformes de streaming, clips, réseaux sociaux et audio haute qualité.",
+   'facts' => ['Production', 'Promotion', 'Distribution sur toutes les plateformes'],
+   'svg' => "<g class='rings' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='100' cy='100' r='60'/><circle cx='100' cy='100' r='60'/><circle cx='100' cy='100' r='60'/></g>
+     <image href='/assets/img/logo-mark.webp' x='22' y='22' width='156' height='156' class='seven-logo'/>"],
 ];
 ?>
 <section class="audio-history" aria-label="L'histoire des supports audio">
@@ -86,13 +91,14 @@ $items = [
       </defs></svg>
       <div class="ah-stage">
         <?php foreach ($items as $i => $it): ?>
-          <article class="ah-item" style="--i:<?= $i ?>">
+          <article class="ah-item<?= !empty($it['seven']) ? ' ah-seven' : '' ?>" style="--i:<?= $i ?>">
             <div class="ah-art"><svg viewBox="0 0 200 200" aria-hidden="true"><?= $it['svg'] ?></svg></div>
             <div class="ah-body">
               <p class="ah-date"><?= $it['year'] ?><span><?= e($it['who']) ?></span></p>
               <h3><?= e($it['name']) ?></h3>
               <p><?= e($it['text']) ?></p>
               <ul class="ah-facts"><?php foreach ($it['facts'] as $f): ?><li><?= e($f) ?></li><?php endforeach; ?></ul>
+              <?php if (!empty($it['seven'])): ?><p><a class="btn" href="<?= e(url(null, '/formules')) ?>">Nos formules</a> <a class="btn ghost" href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a></p><?php endif; ?>
             </div>
           </article>
         <?php endforeach; ?>
@@ -102,7 +108,6 @@ $items = [
         <?php foreach ($items as $i => $it): ?><span class="ah-tick" style="--i:<?= $i ?>"><?= $it['year'] ?></span><?php endforeach; ?>
         <span class="ah-needle"></span>
       </div>
-      <p class="ah-end">Seven.com publie vos titres sur tous les supports d'aujourd'hui. <a href="<?= e(url(null, '/formules')) ?>">Découvrir nos formules →</a></p>
     </div>
   </div>
 </section>

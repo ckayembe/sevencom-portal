@@ -411,3 +411,9 @@ body{position:relative;z-index:0}
 .ah-sticky{height:100svh}
 @media (max-width:700px){.ah-sticky{padding-top:128px;padding-bottom:12px}.ah-end{font-size:.78rem}.ah-year{font-size:38vw}}
 .cta-band .verse{margin-top:2.6rem}.cta-band .verse blockquote{font-size:clamp(1.2rem,2.6vw,1.7rem)}
+@keyframes sevenIn{0%{transform:scale(.6) rotate(-8deg);filter:blur(6px)}60%{transform:scale(1.06) rotate(1deg);filter:none}100%{transform:none}}
+.ah-seven .seven-logo{transform-box:fill-box;transform-origin:center}
+.ah-seven.on .seven-logo{animation:sevenIn 1.2s cubic-bezier(.16,.84,.24,1) both}
+.ah-seven h3{color:transparent;background:linear-gradient(180deg,var(--ink-light),var(--ink) 55%,var(--ink-deep));-webkit-background-clip:text;background-clip:text;text-shadow:none}
+.ah-seven .btn{font-size:.75rem;padding:.65em 1.2em}
+.ah-tick:last-of-type{font-weight:800}
