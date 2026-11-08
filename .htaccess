@@ -5,9 +5,8 @@ RewriteEngine On
 RewriteRule ^(app|data)(/|$) - [F,L]
 RewriteRule ^(README\.md|\.git) - [F,L]
 
-# Force HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# La redirection HTTPS est gérée par Hostinger (réglage « Forcer HTTPS »)
+RewriteRule ^\.well-known/ - [L]
 
 # Tout passe par index.php sauf les fichiers existants (CSS, images...)
 RewriteCond %{REQUEST_FILENAME} !-f
