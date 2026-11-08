@@ -418,3 +418,23 @@ body{position:relative;z-index:0}
 .ah-seven .btn{font-size:.75rem;padding:.65em 1.2em}
 .ah-tick:last-of-type{font-weight:800}
 .depth-bg i.note{background:none;color:var(--ink-light);font-size:calc(var(--s) * .8);line-height:1;text-align:center}
+
+/* ---------- Planificateur de sorties ---------- */
+.progress{height:8px;border-radius:4px;background:rgba(16,45,72,.12);box-shadow:inset 0 1px 2px rgba(16,45,72,.25);overflow:hidden;margin:.6em 0 .3em}
+.progress span{display:block;height:100%;background:linear-gradient(180deg,#5aa6d8,var(--accent))}
+.late{color:#b3261e}
+.plan-todo{list-style:none;padding:0;margin:0 0 1.5rem}
+.plan-todo li{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding:10px 0;box-shadow:inset 0 -1px 0 rgba(16,45,72,.12)}
+.plan-todo .due{font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);min-width:9.5em}
+.plan-todo li.late .due{color:#b3261e}
+.tasks{display:grid;gap:8px}
+.task{display:grid;grid-template-columns:auto 1fr 150px 170px auto;gap:10px;align-items:center;padding:10px 12px;border-radius:8px;box-shadow:inset 0 1px 2px rgba(16,45,72,.18)}
+.task .task-main{display:grid;gap:6px}
+.form .task input.note{font-size:.85rem;padding:.4em .7em}
+.task .when{gap:2px}
+.task input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}
+.task.done{opacity:.55}
+.task.done .task-main input:first-child{text-decoration:line-through}
+.task.late{box-shadow:inset 0 1px 2px rgba(16,45,72,.18),inset 4px 0 0 #b3261e}
+.task.late .when .small{color:#b3261e;font-weight:700}
+@media (max-width:760px){.task{grid-template-columns:auto 1fr}.task .cat,.task .when,.task .remove-task{grid-column:2}}

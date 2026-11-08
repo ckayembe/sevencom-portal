@@ -1,9 +1,9 @@
-<?php use function App\{e, tools}; ?>
+<?php use function App\{e, tools, builtin_tools}; ?>
 <section>
   <h1>Outils du label</h1>
   <p class="lead">Les services et outils que Seven.com met à disposition de ses artistes et partenaires.</p>
   <div class="grid">
-  <?php foreach (tools() as $t): ?>
+  <?php foreach (array_merge(builtin_tools(), tools()) as $t): ?>
     <div class="card">
       <h3><?= e($t['name']) ?></h3>
       <p><?= e($t['summary']) ?></p>

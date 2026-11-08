@@ -35,6 +35,11 @@ Les données modifiables sont dans une base SQLite **hors du dossier du site** :
 Les déploiements GitHub n'y touchent jamais. Au tout premier lancement, la base est remplie à partir de `data/*.json`
 (ces fichiers ne servent plus ensuite). Pensez à sauvegarder ce dossier `storage/`.
 
+## Outils du label
+
+- **Planificateur de sorties** (`/admin/planning`, admin et artistes) : un rétroplanning par sortie, étapes J-60 → J+14 calculées depuis la date de sortie, étapes en retard signalées, export des échéances vers un agenda (`.ics`), ajout possible de la sortie à la fiche artiste. Code : `app/planner.php`, vues `app/views/admin/plans.php` et `plan_form.php`. Les étapes proposées par défaut sont dans `PLAN_TEMPLATE`.
+- Les outils intégrés apparaissent en tête de la page publique `/outils` (`builtin_tools()` dans `app/bootstrap.php`), avant ceux saisis dans « Label & outils ».
+
 ## Ajouter un nouvel artiste (ancienne méthode, remplacée par l'admin)
 
 1. Copier `data/artists/christiankayembe.json` en `data/artists/<slug>.json` et modifier `slug`, nom, bio, sorties, réseaux.
