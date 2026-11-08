@@ -63,6 +63,7 @@ function migrate(PDO $pdo): void {
         );
     SQL);
     planner_migrate($pdo);
+    data_migrations($pdo);
 
     // Premier lancement : on importe le contenu de data/*.json et on crée le compte admin.
     if (!$pdo->query('SELECT COUNT(*) FROM settings')->fetchColumn()) {
@@ -114,4 +115,26 @@ function all_artists(bool $all = false): array {
     $list = [];
     foreach ($rows as $r) { $a = json_decode($r['data'], true); $a['published'] = (bool)$r['published']; $list[$a['slug']] = $a; }
     return $list;
+}
+
+/** Corrections de contenu appliquées une seule fois à la base en ligne (les modifications faites ensuite dans l'admin sont gardées). */
+function data_migrations(PDO $pdo): void {
+    $done = json_decode((string)$pdo->query("SELECT value FROM settings WHERE key = 'migrations'")->fetchColumn(), true) ?: [];
+    if (!$pdo->query("SELECT COUNT(*) FROM settings WHERE key = 'tools'")->fetchColumn()) return;   // base neuve : seed à jour
+    $save = fn(string $k, $v) => $pdo->prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value')->execute([$k, json_encode($v, JSON_UNESCAPED_UNICODE)]);
+
+    // 2026-11-08 : « Promotion » est disponible avec Udhibiti PromoLien
+    if (empty($done['promolien_tool'])) {
+        $tools = json_decode((string)$pdo->query("SELECT value FROM settings WHERE key = 'tools'")->fetchColumn(), true) ?: [];
+        foreach ($tools as &$t) if (($t['name'] ?? '') === 'Promotion') {
+            $t['status'] = 'Disponible';
+            $t['url'] = 'https://promolien.udhibiti.com';
+            $t['cta'] = 'Ouvrir PromoLien';
+            $t['summary'] = "Avec Udhibiti PromoLien : un lien d'écoute pour chaque sortie (toutes les plateformes), pré-saves, annonce aux fans et statistiques des clics.";
+        }
+        unset($t);
+        $save('tools', $tools);
+        $done['promolien_tool'] = 1;
+        $save('migrations', $done);
+    }
 }

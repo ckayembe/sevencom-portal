@@ -1,11 +1,17 @@
-<?php use function App\{e, url, label, tools}; $a = $artist; ?>
+<?php use function App\{e, url, label, tools, promolien_releases, promolien_artist_page, date_fr}; $a = $artist;
+// Sorties publiées par Udhibiti PromoLien (liens comptés « via Seven.com ») ; sinon celles de la fiche.
+$plReleases = promolien_releases($a['slug']);
+$plPage = $plReleases ? promolien_artist_page($a['slug']) : null;
+$plLatest = null; foreach ($plReleases as $r) if (!$r['upcoming']) { $plLatest = $r; break; } ?>
 <section class="hero artist-hero">
   <div class="artist-hero-text">
     <?php if (!empty($a['logo'])): ?><img class="artist-logo" src="<?= e($a['logo']) ?>" alt="Logo <?= e($a['name']) ?>"><?php endif; ?>
     <p class="kicker"><?= e(implode(' · ', array_filter([($a['kind'] ?? 'solo') !== 'solo' ? App\KINDS[$a['kind']] : '', $a['genre'] ?? '', $a['city'] ?? '']))) ?></p>
     <h1 class="engraved"><?= e($a['name']) ?></h1>
     <p class="lead"><?= e($a['tagline']) ?></p>
-    <?php if (!empty($a['releases'][0]['links'])): $r = $a['releases'][0]; ?>
+    <?php if ($plLatest): ?>
+      <p><a class="btn" href="<?= e($plLatest['page']) ?>">Écouter « <?= e($plLatest['title']) ?> »</a></p>
+    <?php elseif (!$plReleases && !empty($a['releases'][0]['links'])): $r = $a['releases'][0]; ?>
       <p><a class="btn" href="<?= e(reset($r['links'])) ?>">Écouter « <?= e($r['title']) ?> »</a></p>
     <?php endif; ?>
   </div>
@@ -26,7 +32,24 @@
 </section>
 <?php endif; ?>
 
-<?php if (!empty($a['releases'])): ?>
+<?php if ($plReleases): ?>
+<section class="pl-releases">
+  <h2>Sorties</h2>
+  <div class="grid">
+  <?php foreach ($plReleases as $r): ?>
+    <div class="card release">
+      <?php if ($cv = $r['cover'] ?: ($a['photo'] ?? '')): ?><a href="<?= e($r['page']) ?>"><img src="<?= e($cv) ?>" alt="Pochette de « <?= e($r['title']) ?> »" loading="lazy"></a><?php endif; ?>
+      <h3><?= e($r['title']) ?></h3>
+      <?php if ($r['artist'] && $r['artist'] !== $a['name']): ?><p><?= e($r['artist']) ?></p><?php endif; ?>
+      <p><?php if ($r['upcoming']): ?><span class="tag">Bientôt</span> <?php endif; ?><?= e(trim($r['kind'] . ($r['date'] ? ' · ' . date_fr($r['date']) : ''), ' ·')) ?></p>
+      <?php if ($r['platforms']): ?><p class="links-inline"><?php foreach ($r['platforms'] as $pl): ?><a href="<?= e($pl['url']) ?>" rel="noopener"><?= e($pl['name']) ?></a><?php endforeach; ?></p><?php endif; ?>
+      <p><a class="btn ghost" href="<?= e($r['page']) ?>" rel="noopener">Toutes les plateformes</a></p>
+    </div>
+  <?php endforeach; ?>
+  </div>
+  <?php if ($plPage): ?><p class="small">Liens d'écoute fournis par <a href="<?= e($plPage) ?>" rel="noopener">Udhibiti PromoLien</a>.</p><?php endif; ?>
+</section>
+<?php elseif (!empty($a['releases'])): ?>
 <section>
   <h2>Sorties</h2>
   <div class="grid">

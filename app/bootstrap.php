@@ -18,6 +18,7 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/import.php';
 require __DIR__ . '/contracts.php';
 require __DIR__ . '/planner.php';
+require __DIR__ . '/promolien.php';
 require __DIR__ . '/portal.php';
 
 function label(): array { static $l; return $l ??= setting('label'); }
@@ -28,7 +29,8 @@ function builtin_tools(): array {
         ['name' => 'Planificateur de sorties', 'summary' => "Un rétroplanning pour chaque single, EP ou album : master, pochette, distribution, pré-sauvegarde et promo, avec les échéances calculées depuis la date de sortie et un rappel dans l'agenda.", 'status' => 'Disponible', 'url' => '/admin/planning', 'cta' => 'Ouvrir (espace artiste)'],
     ];
 }
-function artists(): array { static $a; return $a ??= all_artists(); }
+/** Artistes publiés, tels qu'affichés au public (sans coordonnées dans la présentation). */
+function artists(): array { static $a; return $a ??= array_map('App\\public_artist', all_artists()); }
 function artist(string $slug): ?array { return artists()[$slug] ?? null; }
 
 /** URL du portail ou d'un site artiste (même schéma/port qu'actuellement). */
@@ -96,6 +98,7 @@ function run(): void {
             '/clips' => 'portal/videos',
         ];
         if ($path === '/demo') { demo_page(); return; }
+        if ($path === '/promolien.json') { serve_promolien_list(); return; }
         if (isset($routes[$path])) { render($routes[$path], ['section' => 'portal']); return; }
         // Site artiste aussi accessible via sevencom.tech/artistes/<slug> (utile avant l'activation du sous-domaine)
         if (preg_match('#^/artistes/([a-z0-9-]+)$#', $path, $m) && ($artist = artist($m[1]))) {

@@ -123,12 +123,15 @@ function import_links(array $a, array $urls): array {
         $s = scrape_link($url);
         $a['socials'][$s['platform'] === 'Site web' ? (parse_url($url, PHP_URL_HOST) ?: 'Site web') : $s['platform']] = $url;
         if (!$s['ok']) { $failed[] = $s['platform']; continue; }
+        // Jamais d'e-mail ni de téléphone dans la présentation publique
+        $s['description'] = implode("\n", array_map('App\\strip_contacts', preg_split('/\R/', $s['description'])));
         if ($s['name'] && $empty('name')) { $a['name'] = $s['name']; $done['nom'] = 1; }
         if ($s['description'] && empty(array_filter($a['bio'] ?? [], fn($p) => !str_contains($p, 'à compléter')))) {
             $a['bio'] = array_values(array_filter(array_map('trim', preg_split('/\R\s*\R/', $s['description']))));
             $done['bio'] = 1;
         }
-        if ($s['description'] && $empty('tagline')) { $a['tagline'] = mb_strimwidth(preg_split('/\R/', $s['description'])[0], 0, 160, '…'); }
+        $firstLine = array_values(array_filter(array_map('trim', preg_split('/\R/', $s['description']))))[0] ?? '';
+        if ($firstLine !== '' && $empty('tagline')) { $a['tagline'] = mb_strimwidth($firstLine, 0, 160, '…'); }
         $logo = $logo ?: $s['avatar'];
         $photo = $photo ?: ($s['banner'] ?: $s['image']);
         $known = array_column($a['videos'] ?? [], 'youtube');
