@@ -2,19 +2,16 @@
 $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(), 0, 2); $figs = key_figures(); ?>
 <?php require __DIR__ . '/_audio_history.php'; ?>
 
-<section class="hero">
+<?php require __DIR__ . '/_carousel.php'; ?>
+
+<section class="hero hero-after">
   <h1 class="visually-hidden"><?= e($L['name']) ?></h1>
-  <div class="hero-logo-wrap" style="--logo:url('<?= e($L['logo']) ?>')">
-    <img class="hero-logo" src="<?= e($L['logo']) ?>" alt="<?= e($L['name']) ?> · <?= e($L['slogan']) ?>">
-    <span class="sheen" aria-hidden="true"></span>
-  </div>
   <p class="slogan"><?= e($L['tagline']) ?></p>
   <p class="rotator-line" aria-label="Nous produisons la louange, l'adoration, le gospel, les chorales">Nous produisons <span class="rotator" data-words="la louange|l'adoration|le gospel|les chorales|votre message">la louange</span></p>
   <p class="lead"><?= e($L['description']) ?></p>
   <p class="hero-actions"><a class="btn" href="<?= e(url(null, '/artistes')) ?>">Découvrir nos artistes</a>
      <a class="btn ghost" href="<?= e(url(null, '/demo')) ?>">Soumettre une démo</a></p>
 </section>
-<?php require __DIR__ . '/_carousel.php'; ?>
 <div class="marquee" aria-hidden="true"><div class="marquee-track">
   <?php $words = ['Louange', 'Adoration', 'Gospel', 'Chorales', 'Production', 'Clips', 'Promotion', 'Distribution', 'Booking'];
   for ($k = 0; $k < 2; $k++) foreach ($words as $w) echo '<span>' . e($w) . '</span>'; ?>

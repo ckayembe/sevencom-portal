@@ -417,3 +417,4 @@ body{position:relative;z-index:0}
 .ah-seven h3{color:transparent;background:linear-gradient(180deg,var(--ink-light),var(--ink) 55%,var(--ink-deep));-webkit-background-clip:text;background-clip:text;text-shadow:none}
 .ah-seven .btn{font-size:.75rem;padding:.65em 1.2em}
 .ah-tick:last-of-type{font-weight:800}
+.depth-bg i.note{background:none;color:var(--ink-light);font-size:calc(var(--s) * .8);line-height:1;text-align:center}

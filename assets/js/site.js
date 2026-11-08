@@ -105,8 +105,8 @@
     var bg = document.createElement('div'); bg.className = 'depth-bg'; bg.setAttribute('aria-hidden', 'true');
     var html = '';
     for (var k = 0; k < 12; k++) {
-      var a = k * 2.399, r = 30 + (k * 37) % 40, dot = k % 3 === 2;
-      html += '<i class="' + (dot ? 'dot' : '') + '" style="--x:' + Math.round(Math.cos(a) * r) + 'vw;--y:' + Math.round(Math.sin(a) * r * .7) + 'vh;--s:' + (dot ? 14 + k % 4 * 6 : 40 + (k * 13) % 50) + 'px;--d:' + (11 + (k * 7) % 9) + 's;--w:-' + (k * 1.6).toFixed(1) + 's;--r:' + ((k * 29) % 60 - 30) + 'deg"></i>';
+      var a = k * 2.399, r = 30 + (k * 37) % 40, dot = k % 2 === 0;
+      html += '<i class="' + (dot ? 'dot' : 'note') + '" style="--x:' + Math.round(Math.cos(a) * r) + 'vw;--y:' + Math.round(Math.sin(a) * r * .7) + 'vh;--s:' + (dot ? 14 + k % 4 * 6 : 40 + (k * 13) % 50) + 'px;--d:' + (11 + (k * 7) % 9) + 's;--w:-' + (k * 1.6).toFixed(1) + 's;--r:' + ((k * 29) % 60 - 30) + 'deg">' + (dot ? '' : ['♪', '♫', '♬'][k % 3]) + '</i>';
     }
     bg.innerHTML = html; document.body.insertBefore(bg, document.body.firstChild);
   }
