@@ -23,7 +23,19 @@ Le dépôt correspond directement au dossier `public_html` du site (déployé su
 
 **Liens entre les sites** : chaque site artiste a une barre Seven.com qui renvoie au portail et aux autres artistes, plus une section qui promeut les outils du label.
 
-## Ajouter un nouvel artiste
+## Administration (sevencom.tech/admin)
+
+- **Administrateur** (compte `infos@sevencom.tech`) : crée les artistes et leurs comptes, modifie toutes les fiches, les infos du label et les outils, régénère les mots de passe.
+- **Artiste** : se connecte avec son e-mail et ne peut modifier que sa propre fiche (bio, photo, sorties, vidéos, concerts, réseaux).
+- Chaque nouveau compte doit changer son mot de passe à la première connexion.
+- Les modifications sont en ligne immédiatement, sans redéploiement.
+
+Les données modifiables sont dans une base SQLite **hors du dossier du site** :
+`/home/<user>/domains/sevencom.tech/storage/` (base `sevencom.sqlite` + images dans `uploads/`).
+Les déploiements GitHub n'y touchent jamais. Au tout premier lancement, la base est remplie à partir de `data/*.json`
+(ces fichiers ne servent plus ensuite). Pensez à sauvegarder ce dossier `storage/`.
+
+## Ajouter un nouvel artiste (ancienne méthode, remplacée par l'admin)
 
 1. Copier `data/artists/christiankayembe.json` en `data/artists/<slug>.json` et modifier `slug`, nom, bio, sorties, réseaux.
 2. Déposer ses photos dans `assets/img/artists/`.
@@ -34,7 +46,7 @@ Pour masquer un artiste : `"published": false`.
 ## Tester en local
 
 ```
-SEVENCOM_DOMAIN=localhost php -S 127.0.0.1:8000 index.php
+SEVENCOM_DOMAIN=localhost SEVENCOM_STORAGE=/tmp/sevencom-storage php -S 127.0.0.1:8000 index.php
 ```
 Puis http://localhost:8000 et http://christiankayembe.localhost:8000
 

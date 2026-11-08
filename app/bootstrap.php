@@ -12,27 +12,14 @@ function config(): array {
     ];
 }
 
-function json(string $path): array {
-    $file = ROOT . '/data/' . $path;
-    return is_file($file) ? json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR) : [];
-}
+require __DIR__ . '/db.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
 
-function label(): array { return json('label.json'); }
-function tools(): array { return json('tools.json'); }
-
-function artists(): array {
-    $list = [];
-    foreach (glob(ROOT . '/data/artists/*.json') as $f) {
-        $a = json('artists/' . basename($f));
-        if (($a['published'] ?? true) !== false) $list[$a['slug']] = $a;
-    }
-    uasort($list, fn($x, $y) => ($x['order'] ?? 99) <=> ($y['order'] ?? 99));
-    return $list;
-}
-
-function artist(string $slug): ?array {
-    return artists()[$slug] ?? null;
-}
+function label(): array { static $l; return $l ??= setting('label'); }
+function tools(): array { static $t; return $t ??= setting('tools'); }
+function artists(): array { static $a; return $a ??= all_artists(); }
+function artist(string $slug): ?array { return artists()[$slug] ?? null; }
 
 /** URL du portail ou d'un site artiste (même schéma/port qu'actuellement). */
 function url(?string $sub = null, string $path = '/'): string {
@@ -77,6 +64,15 @@ function run(): void {
         header('Location: ' . url(null, $path), true, 301); return;
     }
 
+    if (preg_match('#^/media/([a-z0-9.]+)$#', $path, $m)) { serve_media($m[1]); return; }
+
+    // L'administration est toujours sur le domaine principal
+    if ($path === '/admin' || str_starts_with($path, '/admin/')) {
+        if ($sub !== null) { header('Location: ' . url(null, $path), true, 302); return; }
+        if (admin_route($path)) return;
+        render('portal/404', ['section' => 'portal'], 404); return;
+    }
+
     if ($sub === null) {
         $routes = [
             '/' => 'portal/home',
@@ -85,6 +81,10 @@ function run(): void {
             '/contact' => 'portal/contact',
         ];
         if (isset($routes[$path])) { render($routes[$path], ['section' => 'portal']); return; }
+        // Site artiste aussi accessible via sevencom.tech/artistes/<slug> (utile avant l'activation du sous-domaine)
+        if (preg_match('#^/artistes/([a-z0-9-]+)$#', $path, $m) && ($artist = artist($m[1]))) {
+            render('artist/home', ['section' => 'artist', 'artist' => $artist]); return;
+        }
         render('portal/404', ['section' => 'portal'], 404); return;
     }
 

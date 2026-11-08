@@ -16,6 +16,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
 <style>:root{--accent:<?= e($accent) ?>}</style>
 </head>
 <body class="<?= e($section) ?>">
+<?php if (!empty($flash)): ?><div class="flash"><?= e($flash) ?></div><?php endif; ?>
 <?php if ($section === 'artist'): ?>
   <div class="labelbar">
     <a href="<?= e(url()) ?>" class="brand-sm"><img src="/assets/img/logo-mark.webp" alt=""><?= e($L['name']) ?></a>
@@ -27,6 +28,23 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
       <a href="<?= e(url(null, '/artistes')) ?>">Tous les artistes</a>
     </nav>
   </div>
+<?php elseif ($section === 'admin'): $me = App\current_user(); ?>
+  <header class="site admin-bar">
+    <a href="<?= e(url(null, '/admin')) ?>" class="brand"><img src="/assets/img/logo-mark.webp" alt="">Admin</a>
+    <nav>
+      <?php if ($me && !$me['must_change_password']): ?>
+        <?php if ($me['role'] === 'admin'): ?>
+          <a href="<?= e(url(null, '/admin')) ?>">Artistes</a>
+          <a href="<?= e(url(null, '/admin/label')) ?>">Label &amp; outils</a>
+        <?php elseif ($me['artist_slug']): ?>
+          <a href="<?= e(url(null, '/admin/artistes/' . $me['artist_slug'])) ?>">Ma fiche</a>
+        <?php endif; ?>
+        <a href="<?= e(url(null, '/admin/mot-de-passe')) ?>">Mot de passe</a>
+      <?php endif; ?>
+      <a href="<?= e(url()) ?>">Voir le site</a>
+      <?php if ($me): ?><a href="<?= e(url(null, '/admin/deconnexion')) ?>">Déconnexion</a><?php endif; ?>
+    </nav>
+  </header>
 <?php else: ?>
   <header class="site">
     <a href="<?= e(url()) ?>" class="brand"><img src="/assets/img/logo-mark.webp" alt=""><?= e($L['name']) ?></a>
