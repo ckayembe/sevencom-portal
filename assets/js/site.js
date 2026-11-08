@@ -58,12 +58,13 @@
   // Défilement : en-tête qui se resserre, logo qui recule dans la profondeur, bandeau qui s'incline avec la vitesse
   var header = document.querySelector('header.site'), hero = document.querySelector('.portal .hero');
   var marq = document.querySelector('.marquee-track'), lastY = window.scrollY, skew = 0, ticking = false;
-  if (hero) hero.classList.add('hero-scroll');
+  var recede = hero && hero.querySelector('.hero-logo-wrap');
+  if (recede) hero.classList.add('hero-scroll');
   function frame() {
     ticking = false;
     var y = window.scrollY;
     if (header) header.classList.toggle('scrolled', y > 40);
-    if (hero) {
+    if (recede) {
       var h = hero.offsetHeight || 1, k = Math.min(Math.max(y / h, 0), 1);
       hero.style.setProperty('--hz', (-k * 420).toFixed(1) + 'px');
       hero.style.setProperty('--hy', (k * h * 0.12).toFixed(1) + 'px');

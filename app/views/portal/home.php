@@ -1,11 +1,8 @@
 <?php use function App\{e, url, label, artists, tools, all_releases, all_videos, key_figures, contract_formulas, about}; $L = label();
 $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(), 0, 2); $figs = key_figures(); ?>
-<section class="hero">
-  <h1 class="visually-hidden"><?= e($L['name']) ?></h1>
-  <div class="hero-logo-wrap" style="--logo:url('<?= e($L['logo']) ?>')">
-    <img class="hero-logo" src="<?= e($L['logo']) ?>" alt="<?= e($L['name']) ?> · <?= e($L['slogan']) ?>">
-    <span class="sheen" aria-hidden="true"></span>
-  </div>
+<h1 class="visually-hidden"><?= e($L['name']) ?> · <?= e($L['tagline']) ?></h1>
+<?php require __DIR__ . '/_audio_history.php'; ?>
+<section class="hero hero-after">
   <p class="slogan"><?= e($L['tagline']) ?></p>
   <p class="rotator-line" aria-label="Nous produisons la louange, l'adoration, le gospel, les chorales">Nous produisons <span class="rotator" data-words="la louange|l'adoration|le gospel|les chorales|votre message">la louange</span></p>
   <p class="lead"><?= e($L['description']) ?></p>
@@ -90,8 +87,6 @@ $releases = array_slice(all_releases(), 0, 4); $videos = array_slice(all_videos(
   </div>
   <p><a href="<?= e(url(null, '/outils')) ?>">Voir tous les outils →</a></p>
 </section>
-
-<?php require __DIR__ . '/_audio_history.php'; ?>
 
 <section class="verse">
   <blockquote>« Chantez à l'Éternel un cantique nouveau ! Chantez à l'Éternel, vous tous, habitants de la terre ! »</blockquote>
