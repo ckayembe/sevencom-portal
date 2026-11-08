@@ -1,11 +1,14 @@
 <?php use function App\{e, url, label, tools}; $a = $artist; ?>
-<section class="hero artist-hero" style="background-image:linear-gradient(180deg,rgba(20,50,74,.55),rgba(20,50,74,.9)),url('<?= e($a['cover'] ?? $a['photo']) ?>')">
-  <p class="kicker"><?= e($a['genre']) ?> · <?= e($a['city']) ?></p>
-  <h1><?= e($a['name']) ?></h1>
-  <p class="lead"><?= e($a['tagline']) ?></p>
-  <?php if (!empty($a['releases'][0]['links'])): $r = $a['releases'][0]; ?>
-    <p><a class="btn" href="<?= e(reset($r['links'])) ?>">Écouter « <?= e($r['title']) ?> »</a></p>
-  <?php endif; ?>
+<section class="hero artist-hero">
+  <div class="artist-hero-text">
+    <p class="kicker"><?= e($a['genre']) ?> · <?= e($a['city']) ?></p>
+    <h1 class="engraved"><?= e($a['name']) ?></h1>
+    <p class="lead"><?= e($a['tagline']) ?></p>
+    <?php if (!empty($a['releases'][0]['links'])): $r = $a['releases'][0]; ?>
+      <p><a class="btn" href="<?= e(reset($r['links'])) ?>">Écouter « <?= e($r['title']) ?> »</a></p>
+    <?php endif; ?>
+  </div>
+  <img class="artist-photo" src="<?= e($a['photo']) ?>" alt="<?= e($a['name']) ?>">
 </section>
 
 <section>

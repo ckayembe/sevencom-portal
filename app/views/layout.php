@@ -8,14 +8,17 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($artist['tagline'] ?? $L['description']) ?>">
-<link rel="icon" href="/assets/img/logo-mark.jpg">
+<link rel="icon" href="/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="/assets/css/style.css">
 <style>:root{--accent:<?= e($accent) ?>}</style>
 </head>
 <body class="<?= e($section) ?>">
 <?php if ($section === 'artist'): ?>
   <div class="labelbar">
-    <a href="<?= e(url()) ?>" class="brand-sm"><img src="/assets/img/logo-mark.jpg" alt=""><?= e($L['name']) ?></a>
+    <a href="<?= e(url()) ?>" class="brand-sm"><img src="/assets/img/logo-mark.webp" alt=""><?= e($L['name']) ?></a>
     <span>Artiste du label</span>
     <nav>
       <?php foreach (artists() as $a): if ($a['slug'] === $artist['slug']) continue; ?>
@@ -26,7 +29,7 @@ $accent = $artist['theme']['accent'] ?? $L['theme']['accent']; ?>
   </div>
 <?php else: ?>
   <header class="site">
-    <a href="<?= e(url()) ?>" class="brand"><img src="/assets/img/logo-mark.jpg" alt=""><?= e($L['name']) ?></a>
+    <a href="<?= e(url()) ?>" class="brand"><img src="/assets/img/logo-mark.webp" alt=""><?= e($L['name']) ?></a>
     <nav>
       <a href="<?= e(url(null, '/artistes')) ?>">Artistes</a>
       <a href="<?= e(url(null, '/outils')) ?>">Outils</a>
