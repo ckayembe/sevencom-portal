@@ -127,26 +127,27 @@ function nth_file(string $prefix, string $field, int $i): ?array {
 
 const LINK_FIELDS = ['spotify' => 'Spotify', 'apple' => 'Apple Music', 'deezer' => 'Deezer', 'youtube' => 'YouTube', 'autre' => 'Autre lien'];
 
+const KINDS = ['solo' => 'Artiste solo / indépendant', 'groupe' => 'Groupe', 'chorale' => 'Chorale'];
+
+function slugify(string $s): string {
+    $s = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s) ?: $s;
+    return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($s)), '-') ?: '';
+}
+
 function admin_artist(?string $slug, bool $post): void {
     $isNew = $slug === null;
-    $a = $isNew ? ['slug' => '', 'published' => true, 'order' => 99, 'theme' => ['accent' => '#2c6e9e'], 'bio' => [], 'releases' => [], 'videos' => [], 'events' => [], 'socials' => []]
+    $a = $isNew ? ['slug' => '', 'kind' => 'solo', 'published' => true, 'order' => 99, 'theme' => ['accent' => '#2c6e9e'], 'bio' => [], 'releases' => [], 'videos' => [], 'events' => [], 'socials' => [], 'members' => []]
                 : (all_artists(true)[$slug] ?? null);
     if (!$a) { admin_view('admin/message', ['title' => 'Artiste introuvable', 'text' => ''], 404); return; }
-    $error = null; $account = null;
+    $error = null; $notice = null;
+    $importing = ($_POST['action'] ?? '') === 'import';
 
     if ($post) {
         try {
-            if ($isNew) {
-                $newSlug = strtolower(post_str('slug', 40));
-                if (!preg_match('/^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$/', $newSlug)) throw new \RuntimeException('Sous-domaine invalide : lettres minuscules, chiffres et tirets seulement.');
-                if (in_array($newSlug, ['www', 'admin', 'mail', 'ftp', 'api', 'media', 'webmail'], true) || isset(all_artists(true)[$newSlug])) throw new \RuntimeException('Ce sous-domaine est déjà pris.');
-                $a['slug'] = $newSlug;
-                $email = post_str('account_email', 200);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new \RuntimeException('Adresse e-mail du compte artiste invalide.');
-                $q = db()->prepare('SELECT 1 FROM users WHERE email = ?'); $q->execute([$email]);
-                if ($q->fetchColumn()) throw new \RuntimeException('Un compte existe déjà avec cet e-mail.');
-            }
-            $a['name'] = post_str('name', 120) ?: throw new \RuntimeException('Le nom de l\'artiste est obligatoire.');
+            // 1. Lecture du formulaire
+            $kind = post_str('kind', 20);
+            $a['kind'] = isset(KINDS[$kind]) ? $kind : 'solo';
+            $a['name'] = post_str('name', 120);
             $a['tagline'] = post_str('tagline', 300);
             $a['genre'] = post_str('genre', 80);
             $a['city'] = post_str('city', 80);
@@ -155,19 +156,24 @@ function admin_artist(?string $slug, bool $post): void {
             $a['theme']['accent'] = preg_match('/^#[0-9a-f]{6}$/i', $accent) ? $accent : '#2c6e9e';
             $a['bio'] = array_values(array_filter(array_map('trim', preg_split('/\R\s*\R/', post_str('bio', 10000)))));
             if ($p = upload_image($_FILES['photo'] ?? null)) { $a['photo'] = $p; $a['cover'] = $p; }
-            $a['photo'] ??= '/assets/img/artists/placeholder.svg';
+            elseif (post_str('photo_current', 300) && str_starts_with(post_str('photo_current', 300), '/')) { $a['photo'] = $a['cover'] = post_str('photo_current', 300); }
+            if ($p = upload_image($_FILES['logo'] ?? null)) $a['logo'] = $p;
+            elseif (!empty($_POST['logo_remove'])) unset($a['logo']);
+            elseif (post_str('logo_current', 300) && str_starts_with(post_str('logo_current', 300), '/')) $a['logo'] = post_str('logo_current', 300);
+
+            $a['members'] = [];
+            foreach (post_rows('members', ['name', 'role']) as $r) if ($r['name'] !== '') $a['members'][] = ['name' => $r['name'], 'role' => $r['role']];
 
             $a['socials'] = [];
             foreach (post_rows('socials', ['name', 'url']) as $r) if ($r['name'] && ($u = clean_url($r['url']))) $a['socials'][$r['name']] = $u;
 
-            $old = array_values($a['releases']);
             $a['releases'] = [];
             foreach (post_rows('releases', array_merge(['title', 'type', 'date', 'old_cover'], array_keys(LINK_FIELDS))) as $r) {
                 if ($r['title'] === '') continue;
                 $links = [];
                 foreach (LINK_FIELDS as $k => $label) if ($u = clean_url($r[$k])) $links[$label] = $u;
                 $cover = upload_image(nth_file('releases', 'cover', $r['_i'])) ?: (str_starts_with($r['old_cover'], '/') ? $r['old_cover'] : '');
-                $a['releases'][] = ['title' => $r['title'], 'type' => $r['type'] ?: 'Single', 'date' => $r['date'], 'cover' => $cover ?: $a['photo'], 'links' => $links];
+                $a['releases'][] = ['title' => $r['title'], 'type' => $r['type'] ?: 'Single', 'date' => $r['date'], 'cover' => $cover ?: ($a['photo'] ?? ''), 'links' => $links];
             }
             $a['videos'] = [];
             foreach (post_rows('videos', ['title', 'url']) as $r) if ($id = youtube_id($r['url'])) $a['videos'][] = ['title' => $r['title'] ?: 'Vidéo', 'youtube' => $id];
@@ -177,6 +183,30 @@ function admin_artist(?string $slug, bool $post): void {
             if (is_admin()) {
                 $a['published'] = !empty($_POST['published']);
                 $a['order'] = (int)($_POST['order'] ?? 99);
+            }
+
+            // 2a. Import depuis des liens : on pré-remplit et on réaffiche le formulaire, sans enregistrer
+            if ($importing) {
+                $urls = preg_split('/\s+/', post_str('import_links', 5000), -1, PREG_SPLIT_NO_EMPTY);
+                if (!$urls) throw new \RuntimeException('Collez au moins un lien (chaîne YouTube, page Spotify, Facebook…).');
+                [$a, $notice] = import_links($a, array_slice($urls, 0, 8));
+                if ($isNew && empty($_POST['slug']) && !empty($a['name'])) $_POST['slug'] = slugify($a['name']);
+                admin_view('admin/artist_form', ['a' => $a, 'isNew' => $isNew, 'error' => null, 'notice' => $notice]);
+                return;
+            }
+
+            // 2b. Enregistrement
+            if ($a['name'] === '') throw new \RuntimeException('Le nom est obligatoire.');
+            $a['photo'] ??= '/assets/img/artists/placeholder.svg';
+            if ($isNew) {
+                $newSlug = strtolower(post_str('slug', 40));
+                if (!preg_match('/^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$/', $newSlug)) throw new \RuntimeException('Sous-domaine invalide : lettres minuscules, chiffres et tirets seulement.');
+                if (in_array($newSlug, ['www', 'admin', 'mail', 'ftp', 'api', 'media', 'webmail'], true) || isset(all_artists(true)[$newSlug])) throw new \RuntimeException('Ce sous-domaine est déjà pris.');
+                $email = post_str('account_email', 200);
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new \RuntimeException('Adresse e-mail du compte invalide.');
+                $q = db()->prepare('SELECT 1 FROM users WHERE email = ?'); $q->execute([$email]);
+                if ($q->fetchColumn()) throw new \RuntimeException('Un compte existe déjà avec cet e-mail.');
+                $a['slug'] = $newSlug;
             }
             save_artist($a);
 
@@ -194,7 +224,7 @@ function admin_artist(?string $slug, bool $post): void {
             $error = $e->getMessage();
         }
     }
-    admin_view('admin/artist_form', ['a' => $a, 'isNew' => $isNew, 'error' => $error]);
+    admin_view('admin/artist_form', ['a' => $a, 'isNew' => $isNew, 'error' => $error, 'notice' => $notice]);
 }
 
 function admin_label(bool $post): void {

@@ -112,3 +112,10 @@ footer.site a{color:var(--muted)}
 @media (max-width:640px){.form .two{grid-template-columns:1fr}.table{font-size:.85rem}}
 button.btn{border:0;cursor:pointer;font-family:inherit}
 .add-row{justify-self:start}
+.form select{font:inherit;font-weight:400;color:var(--text);padding:.65em .8em;border:0;border-radius:6px;background:rgba(255,255,255,.55);box-shadow:inset 0 1px 3px rgba(16,45,72,.25),0 1px 0 var(--hi)}
+.thumb.logo{object-fit:contain;background:rgba(255,255,255,.5)}
+fieldset.import{background:rgba(90,166,216,.10)}
+.artist-logo{height:96px;width:auto;margin-bottom:8px;border-radius:12px}
+.members{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px 24px}
+.members li strong{color:var(--ink)}
+.kind-tag{margin-left:6px;vertical-align:middle}

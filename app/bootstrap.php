@@ -15,6 +15,7 @@ function config(): array {
 require __DIR__ . '/db.php';
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
+require __DIR__ . '/import.php';
 
 function label(): array { static $l; return $l ??= setting('label'); }
 function tools(): array { static $t; return $t ??= setting('tools'); }

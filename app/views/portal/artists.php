@@ -6,7 +6,7 @@
   <?php foreach (artists() as $a): ?>
     <a class="card" href="<?= e(url($a['slug'])) ?>" style="--accent:<?= e($a['theme']['accent'] ?? '') ?>">
       <img src="<?= e($a['photo']) ?>" alt="" loading="lazy">
-      <h3><?= e($a['name']) ?></h3>
+      <h3><?= e($a['name']) ?><?php if (($a['kind'] ?? 'solo') !== 'solo'): ?> <span class="tag kind-tag"><?= e(App\KINDS[$a['kind']]) ?></span><?php endif; ?></h3>
       <p><?= e($a['genre']) ?> · <?= e($a['city']) ?></p>
       <span class="small"><?= e($a['slug']) ?>.<?= e(App\config()['domain']) ?> →</span>
     </a>

@@ -1,7 +1,8 @@
 <?php use function App\{e, url, label, tools}; $a = $artist; ?>
 <section class="hero artist-hero">
   <div class="artist-hero-text">
-    <p class="kicker"><?= e($a['genre']) ?> · <?= e($a['city']) ?></p>
+    <?php if (!empty($a['logo'])): ?><img class="artist-logo" src="<?= e($a['logo']) ?>" alt="Logo <?= e($a['name']) ?>"><?php endif; ?>
+    <p class="kicker"><?= e(implode(' · ', array_filter([($a['kind'] ?? 'solo') !== 'solo' ? App\KINDS[$a['kind']] : '', $a['genre'] ?? '', $a['city'] ?? '']))) ?></p>
     <h1 class="engraved"><?= e($a['name']) ?></h1>
     <p class="lead"><?= e($a['tagline']) ?></p>
     <?php if (!empty($a['releases'][0]['links'])): $r = $a['releases'][0]; ?>
@@ -15,6 +16,15 @@
   <h2>Biographie</h2>
   <?php foreach ($a['bio'] as $p): ?><p><?= e($p) ?></p><?php endforeach; ?>
 </section>
+
+<?php if (!empty($a['members'])): ?>
+<section>
+  <h2><?= ($a['kind'] ?? '') === 'chorale' ? 'La chorale' : 'Les membres' ?></h2>
+  <ul class="members"><?php foreach ($a['members'] as $m): ?>
+    <li><strong><?= e($m['name']) ?></strong><?php if ($m['role']): ?><br><span class="small"><?= e($m['role']) ?></span><?php endif; ?></li>
+  <?php endforeach; ?></ul>
+</section>
+<?php endif; ?>
 
 <?php if (!empty($a['releases'])): ?>
 <section>
@@ -55,7 +65,7 @@
 <section>
   <h2>Suivre <?= e($a['name']) ?></h2>
   <ul class="links"><?php foreach ($a['socials'] as $n => $h): ?><li><a href="<?= e($h) ?>"><?= e($n) ?></a></li><?php endforeach; ?></ul>
-  <p>Booking : <a href="mailto:<?= e($a['booking'] ?? label()['email']) ?>"><?= e($a['booking'] ?? label()['email']) ?></a></p>
+  <p>Booking : <a href="mailto:<?= e(($a['booking'] ?? '') ?: label()['email']) ?>"><?= e(($a['booking'] ?? '') ?: label()['email']) ?></a></p>
 </section>
 
 <section class="label-promo">

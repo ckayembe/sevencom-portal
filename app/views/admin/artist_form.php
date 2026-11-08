@@ -1,4 +1,4 @@
-<?php use function App\{e, url, csrf_field, is_admin}; use const App\LINK_FIELDS;
+<?php use function App\{e, url, csrf_field, is_admin}; use const App\{LINK_FIELDS, KINDS};
 $releaseRows = array_map(function ($r) {
     $row = ['title' => $r['title'] ?? '', 'type' => $r['type'] ?? '', 'date' => $r['date'] ?? '', 'old_cover' => $r['cover'] ?? ''];
     foreach (LINK_FIELDS as $k => $label) $row[$k] = $r['links'][$label] ?? '';
@@ -13,9 +13,19 @@ $videoRows = array_map(fn($v) => ['title' => $v['title'], 'url' => 'https://yout
   <h1><?= $isNew ? 'Nouvel artiste' : e($a['name']) ?></h1>
   <?php if (!$isNew): ?><p><a href="<?= e(url($a['slug'])) ?>" target="_blank">Voir son site →</a></p><?php endif; ?>
   <?php if ($error): ?><p class="error"><?= e($error) ?></p><?php endif; ?>
+  <?php if (!empty($notice)): ?><p class="flash"><?= e($notice) ?></p><?php endif; ?>
 
   <form method="post" enctype="multipart/form-data" class="form wide">
     <?= csrf_field() ?>
+    <input type="hidden" name="photo_current" value="<?= e($a['photo'] ?? '') ?>">
+    <input type="hidden" name="logo_current" value="<?= e($a['logo'] ?? '') ?>">
+
+    <fieldset class="import"><legend>Pré-remplir depuis des liens</legend>
+      <label>Collez les liens existants, un par ligne : chaîne YouTube, page Spotify, Facebook, Instagram, site web…
+        <textarea name="import_links" rows="3" placeholder="https://www.youtube.com/@nom-de-la-chaine&#10;https://open.spotify.com/artist/..."></textarea></label>
+      <p class="small">On récupère le nom, la description, le logo, la photo de bannière et les dernières vidéos. Rien n'est enregistré avant que vous cliquiez sur « <?= $isNew ? 'Créer' : 'Enregistrer' ?> ».</p>
+      <button class="btn ghost" name="action" value="import" formnovalidate>Importer les infos</button>
+    </fieldset>
 
     <?php if ($isNew): ?>
     <fieldset><legend>Compte et adresse</legend>
@@ -26,7 +36,13 @@ $videoRows = array_map(fn($v) => ['title' => $v['title'], 'url' => 'https://yout
     <?php endif; ?>
 
     <fieldset><legend>Identité</legend>
-      <label>Nom d'artiste<input name="name" required value="<?= e($a['name'] ?? '') ?>"></label>
+      <div class="two">
+        <label>Type
+          <select name="kind" id="kind">
+            <?php foreach (KINDS as $k => $label): ?><option value="<?= e($k) ?>" <?= ($a['kind'] ?? 'solo') === $k ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?>
+          </select></label>
+        <label>Nom <span class="small">(de l'artiste, du groupe ou de la chorale)</span><input name="name" required value="<?= e($a['name'] ?? '') ?>"></label>
+      </div>
       <label>Phrase d'accroche<input name="tagline" value="<?= e($a['tagline'] ?? '') ?>"></label>
       <div class="two">
         <label>Style musical<input name="genre" value="<?= e($a['genre'] ?? '') ?>"></label>
@@ -38,6 +54,13 @@ $videoRows = array_map(fn($v) => ['title' => $v['title'], 'url' => 'https://yout
       </div>
       <label class="file">Photo <span class="small">(JPG, PNG ou WebP, 8 Mo max.)</span><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"></label>
       <?php if (!empty($a['photo'])): ?><img class="thumb" src="<?= e($a['photo']) ?>" alt=""><?php endif; ?>
+      <label class="file">Logo <span class="small">(facultatif, idéal pour un groupe ou une chorale)</span><input type="file" name="logo" accept="image/jpeg,image/png,image/webp"></label>
+      <?php if (!empty($a['logo'])): ?><img class="thumb logo" src="<?= e($a['logo']) ?>" alt=""><label class="check"><input type="checkbox" name="logo_remove" value="1"> Retirer le logo</label><?php endif; ?>
+    </fieldset>
+
+    <fieldset id="members-block"><legend>Membres</legend>
+      <p class="small">Pour un groupe ou une chorale : membres, chef de chœur, musiciens…</p>
+      <?php $name = 'members'; $rows = $a['members'] ?? []; $fields = ['name' => ['Nom', 'text'], 'role' => ['Rôle (voix, instrument, direction…)', 'text']]; require __DIR__ . '/_rows.php'; ?>
     </fieldset>
 
     <fieldset><legend>Biographie</legend>
@@ -72,7 +95,7 @@ $videoRows = array_map(fn($v) => ['title' => $v['title'], 'url' => 'https://yout
     </fieldset>
     <?php endif; ?>
 
-    <p><button class="btn"><?= $isNew ? 'Créer l\'artiste et son compte' : 'Enregistrer' ?></button></p>
+    <p><button class="btn" name="action" value="save"><?= $isNew ? 'Créer l\'artiste et son compte' : 'Enregistrer' ?></button></p>
   </form>
 </section>
 <script src="/assets/js/admin.js"></script>
