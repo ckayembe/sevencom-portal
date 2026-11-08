@@ -1,0 +1,16 @@
+{
+  "name": "SevenCom",
+  "tagline": "Label de production d'artistes chrétiens",
+  "description": "SevenCom est un label de production qui accompagne les artistes chrétiens, de la création à la diffusion, pour porter leur message le plus loin possible grâce à ses propres outils de gestion et de promotion.",
+  "email": "infos@sevencom.tech",
+  "theme": {
+    "accent": "#2c6e9e"
+  },
+  "socials": {
+    "Instagram": "https://instagram.com/",
+    "YouTube": "https://youtube.com/",
+    "TikTok": "https://tiktok.com/"
+  },
+  "slogan": "Le chiffre de votre réussite",
+  "logo": "/assets/img/logo-sevencom.jpg"
+}

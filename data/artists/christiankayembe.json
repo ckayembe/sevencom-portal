@@ -1,0 +1,32 @@
+{
+  "slug": "christiankayembe",
+  "order": 1,
+  "published": true,
+  "name": "Christian Kayembe",
+  "tagline": "Fondateur de SevenCom et premier artiste du label de musique chrétienne.",
+  "genre": "À compléter",
+  "city": "À compléter",
+  "photo": "/assets/img/artists/placeholder.svg",
+  "cover": "/assets/img/artists/placeholder.svg",
+  "theme": { "accent": "#2c6e9e" },
+  "bio": [
+    "Biographie à compléter : parcours, influences, projets en cours.",
+    "Christian Kayembe a fondé SevenCom pour donner aux artistes les outils de se développer en toute indépendance."
+  ],
+  "releases": [
+    {
+      "title": "Premier single (à compléter)",
+      "type": "Single",
+      "date": "2026",
+      "cover": "/assets/img/artists/placeholder.svg",
+      "links": { "Spotify": "https://open.spotify.com/", "YouTube": "https://youtube.com/" }
+    }
+  ],
+  "videos": [],
+  "events": [],
+  "socials": {
+    "Instagram": "https://instagram.com/",
+    "YouTube": "https://youtube.com/"
+  },
+  "booking": "infos@sevencom.tech"
+}

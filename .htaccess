@@ -1,0 +1,14 @@
+Options -Indexes
+RewriteEngine On
+
+# Code et données jamais accessibles depuis le web
+RewriteRule ^(app|data)(/|$) - [F,L]
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Tout passe par index.php sauf les fichiers existants (CSS, images...)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
